@@ -1,7 +1,6 @@
 package sk.potociarm.workguard.data
 
 import kotlinx.coroutines.flow.Flow
-import sk.potociarm.workguard.data.WorkEvent
 
 /**
  * Repository that provides insert, update, delete, and retrieve of [WorkEvent] from a given data source.

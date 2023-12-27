@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
-import sk.potociarm.workguard.data.WorkTag
 
 @Dao
 interface WorkTagDao {
