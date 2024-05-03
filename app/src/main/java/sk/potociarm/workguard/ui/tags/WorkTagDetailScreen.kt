@@ -37,14 +37,14 @@ import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 object WorkTagDetailsDestination : NavDestination {
     override val route = "worktag_details"
     override val titleRes = R.string.worktag_detail_title
-    const val WorkTagIdArg = "id"
+    const val workTagIdArg = "id"
     val routeWithArgs = "$route/{$ WorkTagIdArg}"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun  WorkTagDetailsScreen(
-    //todo navigateToEdit WorkTag: (Int) -> Unit,
+    navigateToEditWorkTag: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
