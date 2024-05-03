@@ -16,4 +16,9 @@ data class WorkTag (
     val parentId: Int?,
     var name: String,
     val price: Double = 0.0
-)
+) {
+    fun getParentName(): String {
+        //todo parent name getter
+        return "Not implemented yet"
+    }
+}
