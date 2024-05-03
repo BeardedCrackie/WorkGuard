@@ -16,8 +16,8 @@ data class WorkEvent (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val tag: Int?,
-    val startTime: String,
-    val endTime: String,
+    @ColumnInfo(name = "start_time") val startTime: String,
+    @ColumnInfo(name = "end_time") val endTime: String,
     var name: String,
     val description: String
 )
