@@ -9,6 +9,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import sk.potociarm.workguard.WorkGuardApplication
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsViewModel
+import sk.potociarm.workguard.ui.tags.WorkTagEntryViewModel
+import sk.potociarm.workguard.ui.tags.WorkTagListViewModel
 
 /**
  * Provides Factory to create instance of ViewModel for the entire WorkGuard app
@@ -21,6 +23,17 @@ object AppViewModelProvider {
                 this.createSavedStateHandle()
             )
         }
+        initializer {
+            WorkTagEntryViewModel(workGuardApplication().container.tagRepository)
+        }
+        initializer {
+            WorkTagDetailsViewModel(
+                this.createSavedStateHandle()
+            )
+        }
+        initializer {
+            WorkTagListViewModel(workGuardApplication().container.tagRepository)
+        }
     }
 }
 
@@ -29,5 +42,5 @@ object AppViewModelProvider {
  * Extension function to queries for [Application] object and returns an instance of
  * [WorkGuardApplication].
  */
-fun CreationExtras.inventoryApplication(): WorkGuardApplication =
+fun CreationExtras.workGuardApplication(): WorkGuardApplication =
     (this[AndroidViewModelFactory.APPLICATION_KEY] as WorkGuardApplication)

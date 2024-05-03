@@ -4,12 +4,17 @@ package sk.potociarm.workguard.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import sk.potociarm.workguard.ui.home.HomeScreen
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsScreen
+import sk.potociarm.workguard.ui.tags.WorkTagEntryDestination
+import sk.potociarm.workguard.ui.tags.WorkTagEntryScreen
 import sk.potociarm.workguard.ui.tags.WorkTagListDestination
+import sk.potociarm.workguard.ui.tags.WorkTagListScreen
 
 
 /**
@@ -35,15 +40,31 @@ fun AppNavHost(
             )
         }
         composable(route = WorkTagListDestination.route) {
-            WorkTagDetailsScreen(
+            WorkTagListScreen(
+                navigateToWorkTagEntry = { navController.navigate(WorkTagEntryDestination.route) },
+                navigateToWorkTagUpdate = { navController.navigate("${WorkTagDetailsDestination.route}/${it}")
+                },
+                navigateUp = { navController.navigateUp() },
                 navigateBack = { navController.popBackStack() },
-                //todo navigation
             )
         }
-        composable(route = WorkTagDetailsDestination.route) {
+        composable(
+            route = WorkTagDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(WorkTagDetailsDestination.workTagIdArg) {
+                type = NavType.IntType
+            })
+        ) {
             WorkTagDetailsScreen(
+                navigateToEditWorkTag = {
+                    navController.navigate("${WorkTagDetailsDestination.route}/$it")
+                },
                 navigateBack = { navController.popBackStack() },
-                //todo navigation
+            )
+        }
+        composable(route = WorkTagEntryDestination.route) {
+            WorkTagEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.popBackStack() }
             )
         }
     }

@@ -63,10 +63,11 @@ private fun HomeBody(
 
 @Composable
 fun PrintRunning() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
 }
 
 @Composable
 fun PrintStats() {
-    TODO("Not yet implemented")
+    //TODO("Not yet implemented")
+    //https://github.com/PhilJay/MPAndroidChart?tab=readme-ov-file
 }
