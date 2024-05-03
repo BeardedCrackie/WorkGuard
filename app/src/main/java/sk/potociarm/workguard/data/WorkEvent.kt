@@ -1,18 +1,21 @@
 package sk.potociarm.workguard.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "work_event",
-    foreignKeys = [androidx.room.ForeignKey(
+    foreignKeys = [ForeignKey(
     entity = WorkTag::class,
-    childColumns = ["tagId"],
-    parentColumns = ["id"]
-)])
+    parentColumns = ["id"],
+    childColumns = ["tag"],
+)]
+)
 data class WorkEvent (
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val tagId: Int,
+    val tag: Int?,
     val startTime: String,
     val endTime: String,
     var name: String,
