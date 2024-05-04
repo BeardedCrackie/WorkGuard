@@ -16,6 +16,8 @@ interface WorkTagsRepository {
      */
     fun getWorkTagStream(id: Int): Flow<WorkTag?>
 
+    fun getWorkTagParentStream(id: Int): Flow<WorkTag?>
+
     /**
      * Insert WorkTag in the data source
      */

@@ -217,6 +217,7 @@ fun WorkTagItemPreview() {
     WorkGuardTheme {
         WorkTagDetailCard(
             tag = WorkTag(1, 2, "Tag 1",10.0),
+            parentTag = WorkTag(0, null, "Tag 0",10.0),
             navigateTParentWorkTag = {}
         )
     }

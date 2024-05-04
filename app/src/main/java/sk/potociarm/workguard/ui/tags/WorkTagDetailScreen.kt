@@ -57,6 +57,7 @@ fun  WorkTagDetailsScreen(
     viewModel: WorkTagDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val tagUiState = viewModel.uiState.collectAsState()
+    val parentTagUiState = viewModel.uiParentState.collectAsState()
     Scaffold(
         topBar = {
             /*
@@ -79,6 +80,7 @@ fun  WorkTagDetailsScreen(
     ) { innerPadding ->
          WorkTagDetailsBody(
             workTagDetailsUiState = tagUiState.value,
+            parentWorkTagDetailsUiState = parentTagUiState.value,
             onDelete = { },
             navigateTParentWorkTag = navigateTParentWorkTag,
             modifier = Modifier
@@ -95,9 +97,10 @@ fun  WorkTagDetailsScreen(
 @Composable
 private fun WorkTagDetailsBody(
     workTagDetailsUiState: WorkTagDetailsUiState,
+    parentWorkTagDetailsUiState: WorkTagDetailsUiState,
     onDelete: () -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
@@ -107,6 +110,7 @@ private fun WorkTagDetailsBody(
 
         WorkTagDetailCard(
             tag = workTagDetailsUiState.workTagDetails.toWorkTag(),
+            parentTag = parentWorkTagDetailsUiState.workTagDetails.toWorkTag(),
             modifier = Modifier.fillMaxWidth(),
             navigateTParentWorkTag = navigateTParentWorkTag
         )
@@ -125,7 +129,9 @@ private fun WorkTagDetailsBody(
 @Composable
 fun WorkTagDetailCard(
     navigateTParentWorkTag: (Int) -> Unit,
-    tag: WorkTag, modifier: Modifier = Modifier
+    tag: WorkTag,
+    parentTag: WorkTag,
+    modifier: Modifier = Modifier
 ) {
     OutlinedCard(
         elevation = CardDefaults.cardElevation(
@@ -182,7 +188,7 @@ fun WorkTagDetailCard(
             }
             if (tag.parentId != null) {
                 WorkTagCard(
-                    tag = WorkTag(1, null, "Parent Example", 10.0  ),
+                    tag = parentTag,
                     modifier = modifier.clickable {
                         navigateTParentWorkTag(tag.parentId.toInt())
                     })
@@ -214,7 +220,8 @@ private fun TagDetailsRow(
 fun WorkTagDetailsPreview() {
     WorkTagDetailCard(
         navigateTParentWorkTag = { },
-        tag = WorkTag(1, null,"Sample", 0.0)
+        tag = WorkTag(1, 3,"Sample", 0.0),
+        parentTag = WorkTag(2, null,"Sample parent", 10.0),
     )
 }
 
@@ -233,7 +240,15 @@ fun ItemDetailsScreenPreview() {
                 )
             ),
             onDelete = {},
-            navigateTParentWorkTag = {}
+            navigateTParentWorkTag = {},
+            parentWorkTagDetailsUiState = WorkTagDetailsUiState(
+                workTagDetails = WorkTagDetails(
+                    id = 0,
+                    name = "TagName",
+                    price = "0.0",
+                    parent = "",
+                )
+            )
         )
     }
 }
