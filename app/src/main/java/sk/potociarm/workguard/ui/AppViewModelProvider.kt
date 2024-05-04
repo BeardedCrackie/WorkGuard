@@ -20,16 +20,12 @@ object AppViewModelProvider {
 
         initializer {
             WorkTagDetailsViewModel(
-                this.createSavedStateHandle()
+                this.createSavedStateHandle(),
+                workGuardApplication().container.tagRepository
             )
         }
         initializer {
             WorkTagEntryViewModel(workGuardApplication().container.tagRepository)
-        }
-        initializer {
-            WorkTagDetailsViewModel(
-                this.createSavedStateHandle()
-            )
         }
         initializer {
             WorkTagListViewModel(workGuardApplication().container.tagRepository)

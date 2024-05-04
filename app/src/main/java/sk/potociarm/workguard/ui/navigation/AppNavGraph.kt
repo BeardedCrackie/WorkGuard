@@ -44,13 +44,12 @@ fun AppNavHost(
                 navigateToWorkTagEntry = { navController.navigate(WorkTagEntryDestination.route) },
                 navigateToWorkTagUpdate = { navController.navigate("${WorkTagDetailsDestination.route}/${it}")
                 },
-                navigateUp = { navController.navigateUp() },
                 navigateBack = { navController.popBackStack() },
             )
         }
         composable(
             route = WorkTagDetailsDestination.routeWithArgs,
-            arguments = listOf(navArgument(WorkTagDetailsDestination.workTagIdArg) {
+            arguments = listOf(navArgument(WorkTagDetailsDestination.ID_ARG) {
                 type = NavType.IntType
             })
         ) {
@@ -59,6 +58,9 @@ fun AppNavHost(
                     navController.navigate("${WorkTagDetailsDestination.route}/$it")
                 },
                 navigateBack = { navController.popBackStack() },
+                navigateTParentWorkTag = {
+                    navController.navigate("${WorkTagDetailsDestination.route}/$it")
+                }
             )
         }
         composable(route = WorkTagEntryDestination.route) {

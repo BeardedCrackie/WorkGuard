@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import sk.potociarm.workguard.R
+import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.navigation.NavDestination
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
@@ -50,13 +51,11 @@ fun WorkTagEntryScreen(
     val coroutineScope = rememberCoroutineScope()
     Scaffold(
         topBar = {
-            /* todo
-            InventoryTopAppBar(
+            WorkGuardTopAppBar(
                 title = stringResource(WorkTagEntryDestination.titleRes),
                 canNavigateBack = canNavigateBack,
                 navigateUp = onNavigateUp
             )
-             */
         }
     ) { innerPadding ->
         WorkTagEntryBody(
@@ -142,6 +141,20 @@ fun WorkTagInputForm(
                 disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
             ),
             leadingIcon = { Text(Currency.getInstance(Locale.getDefault()).symbol) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = enabled,
+            singleLine = true
+        )
+        OutlinedTextField(
+            value = workTagDetails.parent,
+            onValueChange = { onValueChange(workTagDetails.copy(parent = it)) },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+            label = { Text(stringResource(R.string.workTag_parent)) },
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                unfocusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+                disabledContainerColor = MaterialTheme.colorScheme.secondaryContainer,
+            ),
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             singleLine = true
