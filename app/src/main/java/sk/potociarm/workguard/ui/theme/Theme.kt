@@ -43,6 +43,7 @@ fun WorkGuardTheme(
             letterSpacing = 0.5.sp
         )
     )
+
     MaterialTheme(
         content = content,
         typography = typography,

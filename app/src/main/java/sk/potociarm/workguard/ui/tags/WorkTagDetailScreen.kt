@@ -1,25 +1,21 @@
 package sk.potociarm.workguard.ui.tags
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -31,17 +27,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import sk.potociarm.workguard.R
+import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
+import sk.potociarm.workguard.ui.component.RowDescUiComponent
+import sk.potociarm.workguard.ui.component.WorkTagCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagDetailsDestination : NavDestination {
-    override val route = "worktag_details"
+    override val route = "work_tag_details"
     override val titleRes = R.string.worktag_detail_title
     const val ID_ARG = "id"
     val routeWithArgs = "$route/{$ID_ARG}"
@@ -49,7 +48,7 @@ object WorkTagDetailsDestination : NavDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun  WorkTagDetailsScreen(
+fun WorkTagDetailsScreen(
     navigateToEditWorkTag: (Int) -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
     navigateBack: () -> Unit,
@@ -60,25 +59,22 @@ fun  WorkTagDetailsScreen(
     val parentTagUiState = viewModel.uiParentState.collectAsState()
     Scaffold(
         topBar = {
-            /*
-            InventoryTopAppBar(
-
-                title = stringResource( WorkTagDetailsDestination.titleRes),
+            WorkGuardTopAppBar(
+                title = stringResource(WorkTagDetailsDestination.titleRes),
                 canNavigateBack = true,
                 navigateUp = navigateBack
             )
-             */
         },
         floatingActionButton = {
             FloatingActionButton(
                 //modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large)),
                 onClick = {
-                          //todo
-                    },
+                    //todo
+                },
             ) {}
         }, modifier = modifier
     ) { innerPadding ->
-         WorkTagDetailsBody(
+        WorkTagDetailsBody(
             workTagDetailsUiState = tagUiState.value,
             parentWorkTagDetailsUiState = parentTagUiState.value,
             onDelete = { },
@@ -111,8 +107,8 @@ private fun WorkTagDetailsBody(
         WorkTagDetailCard(
             tag = workTagDetailsUiState.workTagDetails.toWorkTag(),
             parentTag = parentWorkTagDetailsUiState.workTagDetails.toWorkTag(),
-            modifier = Modifier.fillMaxWidth(),
-            navigateTParentWorkTag = navigateTParentWorkTag
+            //modifier = Modifier.fillMaxWidth(),
+            navigateToParentWorkTag = navigateTParentWorkTag
         )
         /*
         Button(
@@ -128,7 +124,7 @@ private fun WorkTagDetailsBody(
 
 @Composable
 fun WorkTagDetailCard(
-    navigateTParentWorkTag: (Int) -> Unit,
+    navigateToParentWorkTag: (Int) -> Unit,
     tag: WorkTag,
     parentTag: WorkTag,
     modifier: Modifier = Modifier
@@ -144,74 +140,40 @@ fun WorkTagDetailCard(
             dimensionResource(
                 id = R.dimen
                     .borderSize
-            ), Color.Black),
-        modifier = modifier, colors = CardDefaults.cardColors(
+            ), Color.Black
+        ),
+        colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     ) {
-        Column(modifier = modifier) {
-            Row {
-                Column {
-                    TagDetailsRow(
-                        labelResID = R.string.tag,
-                        tagDetail = tag.name,
-                        modifier = Modifier.padding(
-                            horizontal = dimensionResource(
-                                id = R.dimen
-                                    .padding_medium
-                            )
-                        )
-                    )
-                    val parent = if (tag.parentId == null) "No parent" else ""
-                    TagDetailsRow(
-                        labelResID = R.string.parentTtag,
-                        tagDetail = parent,
-                        modifier = Modifier.padding(
-                            horizontal = dimensionResource(
-                                id = R.dimen
-                                    .padding_medium
-                            )
-                        )
-                    )
+        Column(
+            modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
+        ) {
+            RowDescUiComponent(
+                labelResID = R.string.tag_name,
+                textValue = tag.name,
+            )
+            RowDescUiComponent(
+                labelResID = R.string.tag_price,
+                textValue = tag.price.toString(),
+            )
+            HorizontalDivider(
+                color  = MaterialTheme.colorScheme.outlineVariant,
+                thickness = 1.dp
+            )
+            RowDescUiComponent(
+                labelResID = R.string.tag_parent,
+                null
+            )
+            WorkTagCard(
+                tag = parentTag,
+                parentTag = null,
+                modifier = modifier.clickable {
+                    navigateToParentWorkTag(parentTag.id)
                 }
-                TagDetailsRow(
-                    labelResID = R.string.tagPrice,
-                    tagDetail = tag.price.toString(),
-                    modifier = Modifier.padding(
-                        horizontal = dimensionResource(
-                            id = R.dimen
-                                .padding_medium
-                        )
-                    )
-                )
-            }
-            if (tag.parentId != null) {
-                WorkTagCard(
-                    tag = parentTag,
-                    modifier = modifier.clickable {
-                        navigateTParentWorkTag(tag.parentId.toInt())
-                    })
-            }
+            )
         }
-    }
-}
-
-@Composable
-private fun TagDetailsRow(
-    @StringRes labelResID: Int, tagDetail: String, modifier: Modifier = Modifier
-) {
-    Row(modifier = modifier) {
-        Text(
-            stringResource(labelResID),
-            style = MaterialTheme.typography.titleSmall
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Text(
-            text = tagDetail,
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 
@@ -219,23 +181,23 @@ private fun TagDetailsRow(
 @Composable
 fun WorkTagDetailsPreview() {
     WorkTagDetailCard(
-        navigateTParentWorkTag = { },
-        tag = WorkTag(1, 3,"Sample", 0.0),
-        parentTag = WorkTag(2, null,"Sample parent", 10.0),
+        navigateToParentWorkTag = { },
+        tag = WorkTag(1, 3, "Sample", 0.0),
+        parentTag = WorkTag(2, null, "Sample parent", 10.0),
     )
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun ItemDetailsScreenPreview() {
+fun WorkDetailsScreenPreview() {
     WorkGuardTheme {
         WorkTagDetailsBody(
             WorkTagDetailsUiState(
                 workTagDetails = WorkTagDetails(
-                    id = 0,
-                    name = "TagName",
-                    price = "0.0",
+                    id = 1,
+                    name = "Tag-Name",
+                    price = "10.0",
                     parent = "",
                 )
             ),
@@ -244,8 +206,8 @@ fun ItemDetailsScreenPreview() {
             parentWorkTagDetailsUiState = WorkTagDetailsUiState(
                 workTagDetails = WorkTagDetails(
                     id = 0,
-                    name = "TagName",
-                    price = "0.0",
+                    name = "Parent-Tag-Name",
+                    price = "12.0",
                     parent = "",
                 )
             )

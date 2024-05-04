@@ -11,9 +11,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="tag">Tag</string>
-    <string name="parentTtag">Parent tag</string>
-    <string name="tagPrice">Tag price</string>
+    <string name="tag_name">Tag name</string>
+    <string name="tag_parent">Parent tag</string>
+    <string name="tag_price">Tag price</string>
     <string name="worktag_detail_title">Tag detail</string>
     <string name="no_tag_description">No Tag provided</string>
     <string name="item_entry_title">Edit Tag</string>
@@ -22,4 +22,7 @@
     <string name="workTag_name_req">Tag name*</string>
     <string name="workTag_price">Tag price [hour]</string>
     <string name="workTag_parent">parent tag</string>
+    <string name="no_tag_parent">No parent tag</string>
+    <string name="add_work_tag">Add work tag</string>
+    <string name="empty"/>
 </resources>

@@ -1,24 +1,19 @@
 
 package sk.potociarm.workguard.ui.tags
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,7 +22,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -39,6 +33,7 @@ import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
+import sk.potociarm.workguard.ui.component.WorkTagCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
@@ -79,7 +74,7 @@ fun WorkTagListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.tag)
+                    contentDescription = stringResource(R.string.add_work_tag)
                 )
             }
         },
@@ -136,57 +131,9 @@ private fun WorkTagList(
         items(items = itemList, key = { it.id }) { item ->
             WorkTagCard(
                 tag = item,
+                parentTag = itemList.find { it.id == item.parentId },
                 modifier = Modifier
-                    .padding(dimensionResource(id = R.dimen.padding_small))
                     .clickable { onItemClick(item) })
-        }
-    }
-}
-
-
-@Composable
-fun WorkTagCard(
-    tag: WorkTag, modifier: Modifier = Modifier
-) {
-    OutlinedCard(
-        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_small)),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = dimensionResource(
-                id = R.dimen
-                    .elevation
-            )
-        ),
-        border = BorderStroke(
-            dimensionResource(
-                id = R.dimen
-                    .borderSize
-            ), Color.Black),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    ) {
-        Row {
-            Column {
-                Text(
-                    modifier = modifier,
-                    text = tag.name,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                if (tag.parentId != null) {
-                    Text(
-                        modifier = modifier,
-                        text = "Parent name", //todo parent name
-                        style = MaterialTheme.typography.headlineSmall
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                modifier = modifier,
-                text = tag.price.toString() + " €/h", //todo currency
-                style = MaterialTheme.typography.headlineLarge
-            )
         }
     }
 }
@@ -208,15 +155,5 @@ fun HomeBodyPreview() {
 fun WorkTagEmptyListPreview() {
     WorkGuardTheme {
         WorkTagBody(listOf(), onItemClick = {})
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkTagItemPreview() {
-    WorkGuardTheme {
-        WorkTagCard(
-            tag = WorkTag(1, 2, "Tag 1",10.0)
-        )
     }
 }
