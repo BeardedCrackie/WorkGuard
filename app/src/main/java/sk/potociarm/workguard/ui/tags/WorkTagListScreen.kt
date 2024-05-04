@@ -4,7 +4,8 @@ package sk.potociarm.workguard.ui.tags
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,7 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -82,8 +83,12 @@ fun WorkTagListScreen(
         WorkTagBody(
             itemList = workTagListUiState.itemList,
             onItemClick = navigateToWorkTagUpdate,
-            modifier = modifier.fillMaxSize(),
-            contentPadding = innerPadding,
+            modifier = Modifier
+                .padding(
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding()
+                )
         )
     }
 }
@@ -111,7 +116,6 @@ private fun WorkTagBody(
                 itemList = itemList,
                 onItemClick = { onItemClick(it.id) },
                 contentPadding = contentPadding,
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_small))
             )
         }
     }
@@ -122,18 +126,17 @@ private fun WorkTagList(
     itemList: List<WorkTag>,
     onItemClick: (WorkTag) -> Unit,
     contentPadding: PaddingValues,
-    modifier: Modifier = Modifier
 ) {
     LazyColumn(
-        modifier = modifier,
-        contentPadding = contentPadding
+        contentPadding = contentPadding,
     ) {
         items(items = itemList, key = { it.id }) { item ->
             WorkTagCard(
                 tag = item,
                 parentTag = itemList.find { it.id == item.parentId },
                 modifier = Modifier
-                    .clickable { onItemClick(item) })
+                    .clickable { onItemClick(item) }
+            )
         }
     }
 }

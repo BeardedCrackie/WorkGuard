@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 class OfflineWorkTagsRepository(private val workTagDao: WorkTagDao) : WorkTagsRepository {
     override fun getAllWorkTagsStream(): Flow<List<WorkTag>> = workTagDao.getAllWorkTags()
 
-    override fun getWorkTagParentStream(id: Int): Flow<WorkTag> = workTagDao.getWorkTagParent(id)
+    override fun getWorkTagParentStream(id: Int): Flow<WorkTag?> = workTagDao.getWorkTagParent(id)
 
     override fun getWorkTagStream(id: Int): Flow<WorkTag?> = workTagDao.getWorkTag(id)
 

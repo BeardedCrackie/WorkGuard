@@ -25,4 +25,6 @@
     <string name="no_tag_parent">No parent tag</string>
     <string name="add_work_tag">Add work tag</string>
     <string name="empty"/>
+    <string name="work_tag_delete">Delete tag</string>
+    <string name="work_tag_edit">Edit tag</string>
 </resources>

@@ -6,22 +6,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -50,7 +48,7 @@ object WorkTagDetailsDestination : NavDestination {
 @Composable
 fun WorkTagDetailsScreen(
     navigateToEditWorkTag: (Int) -> Unit,
-    navigateTParentWorkTag: (Int) -> Unit,
+    navigateToParentWorkTag: (Int) -> Unit,
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WorkTagDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
@@ -65,20 +63,12 @@ fun WorkTagDetailsScreen(
                 navigateUp = navigateBack
             )
         },
-        floatingActionButton = {
-            FloatingActionButton(
-                //modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_large)),
-                onClick = {
-                    //todo
-                },
-            ) {}
-        }, modifier = modifier
     ) { innerPadding ->
         WorkTagDetailsBody(
             workTagDetailsUiState = tagUiState.value,
             parentWorkTagDetailsUiState = parentTagUiState.value,
-            onDelete = { },
-            navigateTParentWorkTag = navigateTParentWorkTag,
+            navigateTParentWorkTag = navigateToParentWorkTag,
+            editWorkTag = navigateToEditWorkTag,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -94,31 +84,31 @@ fun WorkTagDetailsScreen(
 private fun WorkTagDetailsBody(
     workTagDetailsUiState: WorkTagDetailsUiState,
     parentWorkTagDetailsUiState: WorkTagDetailsUiState,
-    onDelete: () -> Unit,
+    editWorkTag: (Int) -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
+        val currentTag = workTagDetailsUiState.workTagDetails.toWorkTag()
 
         WorkTagDetailCard(
-            tag = workTagDetailsUiState.workTagDetails.toWorkTag(),
+            tag = currentTag,
             parentTag = parentWorkTagDetailsUiState.workTagDetails.toWorkTag(),
-            //modifier = Modifier.fillMaxWidth(),
             navigateToParentWorkTag = navigateTParentWorkTag
         )
-        /*
+
         Button(
-            onClick = onSell WorkTag,
+            onClick = { editWorkTag(currentTag.id) },
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.small,
             enabled = true
         ) {
-            Text(stringResource(R.string.sell))
-        */
+            Text(stringResource(R.string.work_tag_edit))
+        }
     }
 }
 
@@ -126,7 +116,7 @@ private fun WorkTagDetailsBody(
 fun WorkTagDetailCard(
     navigateToParentWorkTag: (Int) -> Unit,
     tag: WorkTag,
-    parentTag: WorkTag,
+    parentTag: WorkTag?,
     modifier: Modifier = Modifier
 ) {
     OutlinedCard(
@@ -159,20 +149,27 @@ fun WorkTagDetailCard(
                 textValue = tag.price.toString(),
             )
             HorizontalDivider(
-                color  = MaterialTheme.colorScheme.outlineVariant,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 thickness = 1.dp
             )
             RowDescUiComponent(
                 labelResID = R.string.tag_parent,
                 null
             )
-            WorkTagCard(
-                tag = parentTag,
-                parentTag = null,
-                modifier = modifier.clickable {
-                    navigateToParentWorkTag(parentTag.id)
-                }
-            )
+            if (tag.parentId != null) {
+                WorkTagCard(
+                    tag = parentTag!!, //if parentId is null, then parent does not exists
+                    parentTag = null,
+                    modifier = modifier.clickable {
+                        navigateToParentWorkTag(parentTag.id)
+                    }
+                )
+            } else {
+                Text(
+                    text = stringResource(id = R.string.no_tag_parent),
+                    style = MaterialTheme.typography.headlineMedium
+                )
+            }
         }
     }
 }
@@ -184,6 +181,16 @@ fun WorkTagDetailsPreview() {
         navigateToParentWorkTag = { },
         tag = WorkTag(1, 3, "Sample", 0.0),
         parentTag = WorkTag(2, null, "Sample parent", 10.0),
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WorkTagDetailsNoParentPreview() {
+    WorkTagDetailCard(
+        navigateToParentWorkTag = { },
+        tag = WorkTag(1, null, "Sample", 0.0),
+        parentTag = null,
     )
 }
 
@@ -201,8 +208,8 @@ fun WorkDetailsScreenPreview() {
                     parent = "",
                 )
             ),
-            onDelete = {},
             navigateTParentWorkTag = {},
+            editWorkTag = {},
             parentWorkTagDetailsUiState = WorkTagDetailsUiState(
                 workTagDetails = WorkTagDetails(
                     id = 0,
