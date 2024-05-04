@@ -149,7 +149,7 @@ fun WorkTagCard(
     tag: WorkTag, modifier: Modifier = Modifier
 ) {
     OutlinedCard(
-        modifier = modifier,
+        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_small)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = dimensionResource(
                 id = R.dimen
@@ -215,10 +215,8 @@ fun WorkTagEmptyListPreview() {
 @Composable
 fun WorkTagItemPreview() {
     WorkGuardTheme {
-        WorkTagDetailCard(
-            tag = WorkTag(1, 2, "Tag 1",10.0),
-            parentTag = WorkTag(0, null, "Tag 0",10.0),
-            navigateTParentWorkTag = {}
+        WorkTagCard(
+            tag = WorkTag(1, 2, "Tag 1",10.0)
         )
     }
 }
