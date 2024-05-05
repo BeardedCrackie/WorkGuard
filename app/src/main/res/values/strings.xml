@@ -27,4 +27,8 @@
     <string name="empty"/>
     <string name="work_tag_delete">Delete tag</string>
     <string name="work_tag_edit">Edit tag</string>
+    <string name="attention">Attention</string>
+    <string name="delete_question">Are you sure you want to delete?</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
