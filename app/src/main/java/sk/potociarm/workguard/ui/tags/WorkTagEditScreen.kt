@@ -53,9 +53,8 @@ object WorkTagEditDestination : NavDestination {
 fun WorkTagEditScreen(
     navigateBack: () -> Unit,
     onDelete: () -> Unit,
-    viewModel: WorkTagEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    modifier: Modifier = Modifier,
-    ) {
+    viewModel: WorkTagEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
     val tagListState by viewModel.otherTagsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
@@ -85,7 +84,7 @@ fun WorkTagEditScreen(
             allTag = tagListState.tagList,
             onSave = {
                 coroutineScope.launch {
-                    viewModel.updateItem()
+                    viewModel.updateTag()
                     navigateBack()
                 }
             },

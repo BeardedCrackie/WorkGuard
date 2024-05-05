@@ -62,4 +62,8 @@ class WorkTagEditViewModel(
         workTagsRepository.deleteWorkTag(tagUiState.toWorkTag())
     }
 
+    suspend fun updateTag() {
+        workTagsRepository.insertWorkTag(tagUiState.toWorkTag())
+    }
+
 }
