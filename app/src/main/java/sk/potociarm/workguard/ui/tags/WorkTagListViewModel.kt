@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import sk.potociarm.workguard.TIMEOUT_MILLIS
 import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
 class WorkTagListViewModel(workTagsRepository: WorkTagsRepository) : ViewModel() {
@@ -18,7 +19,4 @@ class WorkTagListViewModel(workTagsRepository: WorkTagsRepository) : ViewModel()
                 initialValue = WorkTagUiList()
             )
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
-    }
 }

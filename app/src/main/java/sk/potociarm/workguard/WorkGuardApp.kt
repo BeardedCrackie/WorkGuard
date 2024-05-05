@@ -16,6 +16,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import sk.potociarm.workguard.ui.navigation.AppNavHost
 
+public const val TIMEOUT_MILLIS = 5_000L
+
 /**
  * Top level composable that represents screens for the application.
  */
