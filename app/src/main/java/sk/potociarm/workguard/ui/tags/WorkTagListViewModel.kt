@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import sk.potociarm.workguard.data.WorkTag
-import sk.potociarm.workguard.data.WorkTagsRepository
+import sk.potociarm.workguard.data.worktag.WorkTag
+import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
 class WorkTagListViewModel(workTagsRepository: WorkTagsRepository) : ViewModel() {
     val workTagListUiState: StateFlow<WorkTagListUiState> =

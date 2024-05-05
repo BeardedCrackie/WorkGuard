@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import sk.potociarm.workguard.data.WorkTagsRepository
+import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
 class WorkTagDetailsViewModel(
     savedStateHandle: SavedStateHandle,

@@ -1,4 +1,4 @@
-package sk.potociarm.workguard.data
+package sk.potociarm.workguard.data.workevent
 
 import androidx.room.Dao
 import androidx.room.Delete

@@ -4,6 +4,10 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import android.content.Context
 import androidx.room.Room
+import sk.potociarm.workguard.data.workevent.WorkEvent
+import sk.potociarm.workguard.data.workevent.WorkEventDao
+import sk.potociarm.workguard.data.worktag.WorkTag
+import sk.potociarm.workguard.data.worktag.WorkTagDao
 
 @Database(
     entities = [

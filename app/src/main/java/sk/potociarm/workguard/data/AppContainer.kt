@@ -17,6 +17,10 @@
 package sk.potociarm.workguard.data
 
 import android.content.Context
+import sk.potociarm.workguard.data.workevent.OfflineWorkEventsRepository
+import sk.potociarm.workguard.data.workevent.WorkEventsRepository
+import sk.potociarm.workguard.data.worktag.OfflineWorkTagsRepository
+import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
 /**
  * App container for Dependency injection.

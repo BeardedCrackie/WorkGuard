@@ -4,7 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import sk.potociarm.workguard.data.WorkTagsRepository
+import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
 class WorkTagEntryViewModel(private val workTagsRepository: WorkTagsRepository) : ViewModel() {
     /**

@@ -1,9 +1,10 @@
-package sk.potociarm.workguard.data
+package sk.potociarm.workguard.data.workevent
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import sk.potociarm.workguard.data.worktag.WorkTag
 
 @Entity(tableName = "work_event",
     foreignKeys = [ForeignKey(

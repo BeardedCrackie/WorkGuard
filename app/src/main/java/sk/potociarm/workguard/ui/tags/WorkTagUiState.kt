@@ -1,7 +1,6 @@
 package sk.potociarm.workguard.ui.tags
 
-import android.icu.text.NumberFormat
-import sk.potociarm.workguard.data.WorkTag
+import sk.potociarm.workguard.data.worktag.WorkTag
 
 data class WorkTagUiState (
     val workTagDetails: WorkTagDetails = WorkTagDetails(),

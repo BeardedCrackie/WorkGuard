@@ -1,4 +1,4 @@
-package sk.potociarm.workguard.data
+package sk.potociarm.workguard.data.worktag
 
 import kotlinx.coroutines.flow.Flow
 
