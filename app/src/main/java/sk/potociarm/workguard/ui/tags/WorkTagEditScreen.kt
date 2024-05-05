@@ -14,6 +14,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
@@ -22,6 +23,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -56,10 +58,11 @@ object WorkTagEditDestination : NavDestination {
 @Composable
 fun WorkTagEditScreen(
     navigateBack: () -> Unit,
+    onDelete: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WorkTagEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val tagListState by viewModel.workTagListUiState.collectAsState()
+    val tagListState by viewModel.otherTagsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     //todo viewmodel val tagUiState = viewModel.uiState.collectAsState()
@@ -75,11 +78,11 @@ fun WorkTagEditScreen(
     ) { innerPadding ->
         WorkTagEditBody(
             workTagUiState = viewModel.tagUiState,
-            allTag = tagListState.itemList,
+            allTag = tagListState.tagList,
             onDelete = {
                 coroutineScope.launch {
                     viewModel.deleteTag()
-                    navigateBack()
+                    onDelete()
                 }
             },
             modifier = Modifier
@@ -96,7 +99,7 @@ fun WorkTagEditScreen(
 
 @Composable
 private fun WorkTagEditBody(
-    workTagUiState: WorkTagUiState,
+    workTagUiState: WorkTagUi,
     allTag: List<WorkTag>,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
@@ -106,11 +109,10 @@ private fun WorkTagEditBody(
 
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        val currentTag = workTagUiState.workTagUi.toWorkTag()
         var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
         WorkTagEditCard(
-            tag = currentTag,
+            tag = workTagUiState,
             allTag = allTag,
         )
 
@@ -136,7 +138,7 @@ private fun WorkTagEditBody(
 
 @Composable
 fun WorkTagEditCard(
-    tag: WorkTag,
+    tag: WorkTagUi,
     allTag: List<WorkTag>,
     modifier: Modifier = Modifier,
     startExpanded: Boolean = false
@@ -186,16 +188,17 @@ fun WorkTagEditCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ParentDropdownMenu(
-    tag: WorkTag,
+    tag: WorkTagUi,
     allTag: List<WorkTag>,
+    startExpanded: Boolean = false
 ) {
-    var expanded by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(startExpanded) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
-        onExpandedChange = { expanded = it },
+        onExpandedChange = { expanded = false },
     ) {
-        OutlinedTextField(
+        TextField(
             // The `menuAnchor` modifier must be passed to the text field to handle
             // expanding/collapsing the menu on click. A read-only text field has
             // the anchor type `PrimaryNotEditable`.
@@ -203,37 +206,37 @@ private fun ParentDropdownMenu(
             //readOnly = true,
             label = { Text(stringResource(id = R.string.tag_parent)) },
             onValueChange = {},
-            value = allTag.find { it.id == tag.parentId }?.name ?: stringResource(id = R.string.no_tag_parent)
+            value = allTag.find { it.id == tag.parentId }?.name
+                ?: stringResource(id = R.string.no_tag_parent),
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
         )
         ExposedDropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            DropdownMenuItem(
-                text = { Text(stringResource(id = R.string.no_tag_parent)) },
-                onClick = {
-                    expanded = false
-                })
-            for (workTag in allTag) {
+            allTag.forEach { currentTag ->
                 DropdownMenuItem(
                     //text = { Text(workTag.name) },
                     text = {
-                        Text(workTag.name)
+                        Text(currentTag.name)
                     },
                     onClick = {
-                        tag.parentId = workTag.id
+                        tag.parentId = currentTag.id
                         expanded = false
-                    })
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                )
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun WorkTagEditPreview() {
     WorkTagEditCard(
-        tag = sampleTagWithParent(),
+        tag = sampleTagUiWithParent(),
         allTag = sampleTagList(),
     )
 }
@@ -242,7 +245,7 @@ fun WorkTagEditPreview() {
 @Composable
 fun WorkTagEditWithoutParentPreview() {
     WorkTagEditCard(
-        tag = sampleTagWithoutParent(),
+        tag = sampleTagUiWithoutParent(),
         allTag = sampleTagList()
     )
 }
@@ -251,8 +254,9 @@ fun WorkTagEditWithoutParentPreview() {
 @Composable
 fun ParentDropdownMenuPreview() {
     ParentDropdownMenu(
-        tag = sampleTagWithParent(),
+        tag = sampleTagUiWithParent(),
         allTag = sampleTagList(),
+        startExpanded = true
     )
 }
 
@@ -260,15 +264,13 @@ fun ParentDropdownMenuPreview() {
 @Composable
 fun WorkTagEditParentPreview() {
     WorkTagEditCard(
-        tag = sampleTagWithParent(),
+        tag = sampleTagUiWithParent(),
         allTag = sampleTagList(),
         startExpanded = true
     )
 }
 
 
-private fun sampleTagWithParent() = WorkTag(2, 1, "Tag-name", 10.0)
-private fun sampleTagWithoutParent() = WorkTag(2, null, "Tag-name", 10.0)
 
 
 @Preview(showBackground = true)
@@ -276,26 +278,12 @@ private fun sampleTagWithoutParent() = WorkTag(2, null, "Tag-name", 10.0)
 fun WorkEditScreenPreview() {
     WorkGuardTheme {
         WorkTagEditBody(
-            WorkTagUiState(
-                workTagUi = WorkTagUi(
-                    id = 1,
-                    name = "Tag-Name",
-                    price = "10.0",
-                    parent = "",
-                )
-            ),
+            sampleTagUiWithoutParent(),
             onDelete = {},
             allTag = sampleTagList(),
         )
     }
 }
-
-@Composable
-private fun sampleTagList() = listOf(
-    WorkTag(1, 1, "Tag 1", 10.0),
-    WorkTag(2, 1, "Tag 2", 20.0),
-    WorkTag(3, null, "Tag 3", 200.0),
-)
 
 
 @Composable
