@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     )
 data class WorkTag (
     @PrimaryKey(autoGenerate = true) val id: Int,
-    @ColumnInfo(name = "parent_id") val parentId: Int?,
+    @ColumnInfo(name = "parent_id") var parentId: Int?,
     var name: String,
     val price: Double = 0.0
 )
