@@ -34,8 +34,8 @@ import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
-import sk.potociarm.workguard.ui.component.WorkTagCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
+import sk.potociarm.workguard.ui.tags.component.WorkTagCard
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagListDestination : NavDestination {

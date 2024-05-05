@@ -1,39 +1,30 @@
 package sk.potociarm.workguard.ui.tags
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -47,6 +38,7 @@ import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.navigation.NavDestination
+import sk.potociarm.workguard.ui.tags.component.WorkTagEditCard
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagEditDestination : NavDestination {
@@ -61,9 +53,9 @@ object WorkTagEditDestination : NavDestination {
 fun WorkTagEditScreen(
     navigateBack: () -> Unit,
     onDelete: () -> Unit,
+    viewModel: WorkTagEditViewModel = viewModel(factory = AppViewModelProvider.Factory),
     modifier: Modifier = Modifier,
-    viewModel: WorkTagEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
-) {
+    ) {
     val tagListState by viewModel.otherTagsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
@@ -75,7 +67,10 @@ fun WorkTagEditScreen(
                 canNavigateBack = true,
                 navigateUp = navigateBack,
                 actions = {
-                    IconButton(onClick = onDelete) {
+                    IconButton(
+                        onClick = {
+                            deleteConfirmationRequired = true
+                        }) {
                         Icon(
                             ImageVector.vectorResource(id = R.drawable.delete),
                             contentDescription = stringResource(R.string.back_button)
@@ -88,10 +83,10 @@ fun WorkTagEditScreen(
         WorkTagEditBody(
             workTagUiState = viewModel.tagUiState,
             allTag = tagListState.tagList,
-            onDelete = {
+            onSave = {
                 coroutineScope.launch {
-                    viewModel.deleteTag()
-                    onDelete()
+                    viewModel.updateItem()
+                    navigateBack()
                 }
             },
             modifier = Modifier
@@ -101,15 +96,18 @@ fun WorkTagEditScreen(
                     top = innerPadding.calculateTopPadding()
                 )
                 .verticalScroll(rememberScrollState())
-
         )
         if (deleteConfirmationRequired) {
             DeleteConfirmationDialog(
                 onDeleteConfirm = {
-                    deleteConfirmationRequired = false
-                    onDelete()
+                    coroutineScope.launch {
+                        viewModel.deleteTag()
+                        onDelete()
+                    }
                 },
-                onDeleteCancel = { deleteConfirmationRequired = false },
+                onDeleteCancel = {
+                    deleteConfirmationRequired = false
+                },
                 modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
             )
         }
@@ -120,7 +118,7 @@ fun WorkTagEditScreen(
 private fun WorkTagEditBody(
     workTagUiState: WorkTagUi,
     allTag: List<WorkTag>,
-    onDelete: () -> Unit,
+    onSave: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -128,149 +126,19 @@ private fun WorkTagEditBody(
 
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-
         WorkTagEditCard(
             tag = workTagUiState,
             allTag = allTag,
         )
-    }
-}
-
-@Composable
-fun WorkTagEditCard(
-    tag: WorkTagUi,
-    allTag: List<WorkTag>,
-    modifier: Modifier = Modifier,
-    startExpanded: Boolean = false
-) {
-    OutlinedCard(
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = dimensionResource(
-                id = R.dimen
-                    .elevation
-            )
-        ),
-        border = BorderStroke(
-            dimensionResource(
-                id = R.dimen
-                    .borderSize
-            ), Color.Black
-        ),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    ) {
-
-        Column(
-            modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
+        OutlinedButton(
+            onClick = { onSave() },
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
         ) {
-
-            OutlinedTextField(
-                modifier = modifier,
-                value = tag.name,
-                onValueChange = { tag.name = it },
-                label = { Text(stringResource(id = R.string.workTag_name_req)) }
-            )
-
-            OutlinedTextField(
-                value = tag.price.toString() + " €/h", //todo currency
-                onValueChange = { tag.name = it },
-                label = { Text(stringResource(id = R.string.tag_price)) }
-            )
-
-            //todo dropdown parent tag
-            ParentDropdownMenu(tag, allTag)
+            Text(stringResource(R.string.save_action))
         }
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun ParentDropdownMenu(
-    tag: WorkTagUi,
-    allTag: List<WorkTag>,
-    startExpanded: Boolean = false
-) {
-    var expanded by remember { mutableStateOf(startExpanded) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = it },
-    ) {
-        TextField(
-            // The `menuAnchor` modifier must be passed to the text field to handle
-            // expanding/collapsing the menu on click. A read-only text field has
-            // the anchor type `PrimaryNotEditable`.
-            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
-            readOnly = true,
-            label = { Text(stringResource(id = R.string.tag_parent)) },
-            onValueChange = {},
-            value = allTag.find { it.id == tag.parentId }?.name
-                ?: stringResource(id = R.string.no_tag_parent),
-            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-        )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false },
-        ) {
-            allTag.forEach { currentTag ->
-                DropdownMenuItem(
-                    //text = { Text(workTag.name) },
-                    text = {
-                        Text(currentTag.name)
-                    },
-                    onClick = {
-                        tag.parentId = currentTag.id
-                        expanded = false
-                    },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                )
-            }
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun WorkTagEditPreview() {
-    WorkTagEditCard(
-        tag = sampleTagUiWithParent(),
-        allTag = sampleTagList(),
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkTagEditWithoutParentPreview() {
-    WorkTagEditCard(
-        tag = sampleTagUiWithoutParent(),
-        allTag = sampleTagList()
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ParentDropdownMenuPreview() {
-    ParentDropdownMenu(
-        tag = sampleTagUiWithParent(),
-        allTag = sampleTagList(),
-        startExpanded = true
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WorkTagEditParentPreview() {
-    WorkTagEditCard(
-        tag = sampleTagUiWithParent(),
-        allTag = sampleTagList(),
-        startExpanded = true
-    )
-}
-
-
 
 
 @Preview(showBackground = true)
@@ -279,7 +147,7 @@ fun WorkEditScreenPreview() {
     WorkGuardTheme {
         WorkTagEditBody(
             sampleTagUiWithoutParent(),
-            onDelete = {},
+            onSave = {},
             allTag = sampleTagList(),
         )
     }
