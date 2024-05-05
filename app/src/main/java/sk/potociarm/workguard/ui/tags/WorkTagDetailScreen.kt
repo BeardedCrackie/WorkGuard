@@ -4,16 +4,21 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -61,12 +66,27 @@ fun WorkTagDetailsScreen(
                 navigateUp = navigateBack
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { navigateToEditWorkTag(tagUiState.value.id) },
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .padding(
+                        end = WindowInsets.safeDrawing.asPaddingValues()
+                            .calculateEndPadding(LocalLayoutDirection.current)
+                    )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Edit,
+                    contentDescription = stringResource(R.string.work_tag_edit),
+                )
+            }
+        },
     ) { innerPadding ->
         WorkTagDetailsBody(
             tagUiState = tagUiState.value,
             parentTagUiState = parentTagUiState.value,
             navigateTParentWorkTag = navigateToParentWorkTag,
-            editWorkTag = navigateToEditWorkTag,
             modifier = Modifier
                 .padding(
                     start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
@@ -82,7 +102,6 @@ fun WorkTagDetailsScreen(
 private fun WorkTagDetailsBody(
     tagUiState: WorkTagUi,
     parentTagUiState: WorkTagUi?,
-    editWorkTag: (Int) -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -97,15 +116,6 @@ private fun WorkTagDetailsBody(
             parentTag = parentTagUiState,
             navigateToParentWorkTag = navigateTParentWorkTag
         )
-
-        Button(
-            onClick = { editWorkTag(tagUiState.id) },
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-            enabled = true
-        ) {
-            Text(stringResource(R.string.work_tag_edit))
-        }
     }
 }
 
@@ -200,7 +210,6 @@ fun WorkDetailsScreenPreview() {
             tagUiState = sampleTagUiWithParent(),
             parentTagUiState = sampleTagUiWithoutParent(),
             navigateTParentWorkTag = {},
-            editWorkTag = {},
         )
     }
 }
