@@ -1,6 +1,5 @@
 package sk.potociarm.workguard.ui.tags
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,7 +25,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -134,12 +132,6 @@ fun WorkTagDetailCard(
                     .elevation
             )
         ),
-        border = BorderStroke(
-            dimensionResource(
-                id = R.dimen
-                    .borderSize
-            ), Color.Black
-        ),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -154,7 +146,7 @@ fun WorkTagDetailCard(
             )
             RowDescUiComponent(
                 labelResID = R.string.tag_price,
-                textValue = tag.price.toString(),
+                textValue = tag.price,
             )
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant,
@@ -188,7 +180,7 @@ fun WorkTagDetailsPreview() {
     WorkTagDetailCard(
         navigateToParentWorkTag = { },
         tag = sampleTagUiWithParent(),
-        parentTag = sampleTagUiWithoutParent(),
+        parentTag = sampleTagUiWithParent(),
     )
 }
 

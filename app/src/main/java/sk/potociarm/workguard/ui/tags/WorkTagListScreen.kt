@@ -4,8 +4,6 @@ package sk.potociarm.workguard.ui.tags
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,11 +22,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
@@ -62,7 +59,7 @@ fun WorkTagListScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             WorkGuardTopAppBar(
-                title = stringResource(WorkTagEntryDestination.titleRes),
+                title = stringResource(WorkTagListDestination.titleRes),
                 canNavigateBack = true,
                 scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack,
@@ -75,20 +72,14 @@ fun WorkTagListScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_work_tag)
+                    contentDescription = stringResource(R.string.work_tag_list)
                 )
             }
         },
-    ) { innerPadding ->
+    ) {
         WorkTagBody(
             itemList = workTagListUiState.tagList,
             onItemClick = navigateToWorkTagUpdate,
-            modifier = Modifier
-                .padding(
-                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
-                    top = innerPadding.calculateTopPadding()
-                )
         )
     }
 }
@@ -97,12 +88,10 @@ fun WorkTagListScreen(
 private fun WorkTagBody(
     itemList: List<WorkTag>,
     onItemClick: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp),
+    contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
     ) {
         if (itemList.isEmpty()) {
             Text(
@@ -113,9 +102,9 @@ private fun WorkTagBody(
             )
         } else {
             WorkTagList(
-                itemList = itemList,
+                tags = itemList,
                 onItemClick = { onItemClick(it.id) },
-                contentPadding = contentPadding,
+                contentPadding = contentPadding
             )
         }
     }
@@ -123,19 +112,21 @@ private fun WorkTagBody(
 
 @Composable
 private fun WorkTagList(
-    itemList: List<WorkTag>,
+    tags: List<WorkTag>,
     onItemClick: (WorkTag) -> Unit,
-    contentPadding: PaddingValues,
+    contentPadding: PaddingValues
 ) {
     LazyColumn(
-        contentPadding = contentPadding,
-    ) {
-        items(items = itemList, key = { it.id }) { item ->
+        Modifier.padding(contentPadding),
+    ){
+        items(items = tags, key = { it.id }) { item ->
             WorkTagCard(
                 tag = item.toWorkTagUi(),
-                parentTag = itemList.find { it.id == item.parentId },
+                parentTag = tags.find { it.id == item.parentId },
                 modifier = Modifier
+                    .padding(contentPadding)
                     .clickable { onItemClick(item) }
+
             )
         }
     }
