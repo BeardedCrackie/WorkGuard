@@ -3,11 +3,11 @@ package sk.potociarm.workguard.ui.tags
 import sk.potociarm.workguard.data.worktag.WorkTag
 
 data class WorkTagUiState (
-    val workTagDetails: WorkTagDetails = WorkTagDetails(),
+    val workTagUi: WorkTagUi = WorkTagUi(),
     val isEntryValid: Boolean = false
 )
 
-data class WorkTagDetails(
+data class WorkTagUi(
     val id: Int = 0,
     val name: String = "",
     val price: String = "",
@@ -19,7 +19,7 @@ data class WorkTagDetails(
  * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
  * [WorkTagDetailCard.quantity] is not a valid [Int], then the quantity will be set to 0
  */
-fun WorkTagDetails.toWorkTag(): WorkTag = WorkTag(
+fun WorkTagUi.toWorkTag(): WorkTag = WorkTag(
     id = id,
     name = name,
     parentId = parent.toIntOrNull(),
@@ -30,14 +30,14 @@ fun WorkTagDetails.toWorkTag(): WorkTag = WorkTag(
  * Extension function to convert [WorkTag] to [WorkTagUiState]
  */
 fun WorkTag.toWorkTagUiState(isEntryValid: Boolean = false): WorkTagUiState = WorkTagUiState(
-    workTagDetails = this.toWorkTagDetails(),
+    workTagUi = this.toWorkTagUi(),
     isEntryValid = isEntryValid
 )
 
 /**
- * Extension function to convert [WorkTag] to [WorkTagDetailCard]
+ * Extension function to convert [WorkTag] to [WorkTagUi]
  */
-fun WorkTag.toWorkTagDetails(): WorkTagDetails = WorkTagDetails(
+fun WorkTag.toWorkTagUi(): WorkTagUi = WorkTagUi(
     id = id,
     name = name,
     price = price.toString(),

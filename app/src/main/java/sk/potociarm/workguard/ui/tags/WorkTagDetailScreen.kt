@@ -82,8 +82,8 @@ fun WorkTagDetailsScreen(
 
 @Composable
 private fun WorkTagDetailsBody(
-    workTagDetailsUiState: WorkTagDetailsUiState,
-    parentWorkTagDetailsUiState: WorkTagDetailsUiState,
+    workTagDetailsUiState: WorkTagUiState,
+    parentWorkTagDetailsUiState: WorkTagUiState,
     editWorkTag: (Int) -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -93,11 +93,11 @@ private fun WorkTagDetailsBody(
 
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        val currentTag = workTagDetailsUiState.workTagDetails.toWorkTag()
+        val currentTag = workTagDetailsUiState.workTagUi.toWorkTag()
 
         WorkTagDetailCard(
             tag = currentTag,
-            parentTag = parentWorkTagDetailsUiState.workTagDetails.toWorkTag(),
+            parentTag = parentWorkTagDetailsUiState.workTagUi.toWorkTag(),
             navigateToParentWorkTag = navigateTParentWorkTag
         )
 
@@ -200,8 +200,8 @@ fun WorkTagDetailsNoParentPreview() {
 fun WorkDetailsScreenPreview() {
     WorkGuardTheme {
         WorkTagDetailsBody(
-            WorkTagDetailsUiState(
-                workTagDetails = WorkTagDetails(
+            WorkTagUiState(
+                workTagUi = WorkTagUi(
                     id = 1,
                     name = "Tag-Name",
                     price = "10.0",
@@ -210,8 +210,8 @@ fun WorkDetailsScreenPreview() {
             ),
             navigateTParentWorkTag = {},
             editWorkTag = {},
-            parentWorkTagDetailsUiState = WorkTagDetailsUiState(
-                workTagDetails = WorkTagDetails(
+            parentWorkTagDetailsUiState = WorkTagUiState(
+                workTagUi = WorkTagUi(
                     id = 0,
                     name = "Parent-Tag-Name",
                     price = "12.0",

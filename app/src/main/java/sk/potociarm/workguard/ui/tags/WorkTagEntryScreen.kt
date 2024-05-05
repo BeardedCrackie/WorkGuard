@@ -82,7 +82,7 @@ fun WorkTagEntryScreen(
 @Composable
 fun WorkTagEntryBody(
     workTagUiState: WorkTagUiState,
-    onWorkTagValueChange: (WorkTagDetails) -> Unit,
+    onWorkTagValueChange: (WorkTagUi) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -91,7 +91,7 @@ fun WorkTagEntryBody(
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium))
         ) {
         WorkTagInputForm(
-            workTagDetails = workTagUiState.workTagDetails,
+            workTagDetails = workTagUiState.workTagUi,
             onValueChange = onWorkTagValueChange,
             modifier = Modifier.fillMaxWidth()
         )
@@ -108,9 +108,9 @@ fun WorkTagEntryBody(
 
 @Composable
 fun WorkTagInputForm(
-    workTagDetails: WorkTagDetails,
+    workTagDetails: WorkTagUi,
     modifier: Modifier = Modifier,
-    onValueChange: (WorkTagDetails) -> Unit = {},
+    onValueChange: (WorkTagUi) -> Unit = {},
     enabled: Boolean = true
 ) {
     Column(
@@ -167,7 +167,7 @@ fun WorkTagInputForm(
 private fun WorkTagEntryScreenPreview() {
     WorkGuardTheme {
         WorkTagEntryBody(workTagUiState = WorkTagUiState(
-            WorkTagDetails(
+            WorkTagUi(
                 id = 1,
                 parent = "Tag 2",
                 name = "WorkTag name",

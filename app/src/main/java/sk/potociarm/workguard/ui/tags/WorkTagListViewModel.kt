@@ -23,8 +23,3 @@ class WorkTagListViewModel(workTagsRepository: WorkTagsRepository) : ViewModel()
         private const val TIMEOUT_MILLIS = 5_000L
     }
 }
-
-/**
- * Ui State for HomeScreen
- */
-data class WorkTagListUiState(val itemList: List<WorkTag> = listOf())
