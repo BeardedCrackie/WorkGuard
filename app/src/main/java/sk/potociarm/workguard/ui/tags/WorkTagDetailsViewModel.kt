@@ -16,25 +16,28 @@ class WorkTagDetailsViewModel(
 ) : ViewModel() {
     private val itemId: Int = checkNotNull(savedStateHandle[WorkTagDetailsDestination.ID_ARG])
 
-    val uiState: StateFlow<WorkTagUiState> =
+    val uiState: StateFlow<WorkTagUi> =
         workTagRepository.getWorkTagStream(itemId)
             .filterNotNull()
             .map {
-                WorkTagUiState(workTagUi = it.toWorkTagUi())
-            }.stateIn(
+                it.toWorkTagUi()
+            }
+            .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = WorkTagUiState()
+                initialValue = WorkTagUi()
             )
-    val uiParentState: StateFlow<WorkTagUiState> =
+
+    val uiParentState: StateFlow<WorkTagUi> =
         workTagRepository.getWorkTagParentStream(itemId)
             .filterNotNull()
             .map {
-                WorkTagUiState(workTagUi = it.toWorkTagUi())
-            }.stateIn(
+                it.toWorkTagUi()
+            }
+            .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = WorkTagUiState()
+                initialValue = WorkTagUi()
             )
 
     companion object {

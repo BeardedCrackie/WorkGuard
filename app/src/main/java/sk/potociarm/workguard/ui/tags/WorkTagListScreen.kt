@@ -55,7 +55,7 @@ fun WorkTagListScreen(
     modifier: Modifier = Modifier,
     viewModel: WorkTagListViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val workTagListUiState by viewModel.workTagListUiState.collectAsState()
+    val workTagListUiState by viewModel.tagListUiState.collectAsState()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
@@ -81,7 +81,7 @@ fun WorkTagListScreen(
         },
     ) { innerPadding ->
         WorkTagBody(
-            itemList = workTagListUiState.itemList,
+            itemList = workTagListUiState.tagList,
             onItemClick = navigateToWorkTagUpdate,
             modifier = Modifier
                 .padding(
@@ -132,7 +132,7 @@ private fun WorkTagList(
     ) {
         items(items = itemList, key = { it.id }) { item ->
             WorkTagCard(
-                tag = item,
+                tag = item.toWorkTagUi(),
                 parentTag = itemList.find { it.id == item.parentId },
                 modifier = Modifier
                     .clickable { onItemClick(item) }
@@ -145,11 +145,9 @@ private fun WorkTagList(
 @Composable
 fun HomeBodyPreview() {
     WorkGuardTheme {
-        WorkTagBody(listOf(
-            WorkTag(1, 1, "Tag 1",10.0),
-            WorkTag(2, 1,"Tag 2", 20.0),
-            WorkTag(3, null, "Tag 3", 200.0),
-        ), onItemClick = {})
+        WorkTagBody(
+            sampleTagUiList(),
+            onItemClick = {})
     }
 }
 
@@ -157,6 +155,8 @@ fun HomeBodyPreview() {
 @Composable
 fun WorkTagEmptyListPreview() {
     WorkGuardTheme {
-        WorkTagBody(listOf(), onItemClick = {})
+        WorkTagBody(
+            listOf(),
+            onItemClick = {})
     }
 }

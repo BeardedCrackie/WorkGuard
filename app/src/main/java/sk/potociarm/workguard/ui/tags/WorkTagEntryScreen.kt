@@ -81,7 +81,7 @@ fun WorkTagEntryScreen(
 
 @Composable
 fun WorkTagEntryBody(
-    workTagUiState: WorkTagUiState,
+    workTagUiState: WorkTagUi,
     onWorkTagValueChange: (WorkTagUi) -> Unit,
     onSaveClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -91,13 +91,13 @@ fun WorkTagEntryBody(
         modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium))
         ) {
         WorkTagInputForm(
-            workTagDetails = workTagUiState.workTagUi,
+            tag = workTagUiState,
             onValueChange = onWorkTagValueChange,
             modifier = Modifier.fillMaxWidth()
         )
         Button(
             onClick = onSaveClick,
-            enabled = workTagUiState.isEntryValid,
+            enabled = true, //todo validation
             shape = MaterialTheme.shapes.small,
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -108,7 +108,7 @@ fun WorkTagEntryBody(
 
 @Composable
 fun WorkTagInputForm(
-    workTagDetails: WorkTagUi,
+    tag: WorkTagUi,
     modifier: Modifier = Modifier,
     onValueChange: (WorkTagUi) -> Unit = {},
     enabled: Boolean = true
@@ -118,8 +118,8 @@ fun WorkTagInputForm(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
         OutlinedTextField(
-            value = workTagDetails.name,
-            onValueChange = { onValueChange(workTagDetails.copy(name = it)) },
+            value = tag.name,
+            onValueChange = { onValueChange(tag.copy(name = it)) },
             label = { Text(stringResource(R.string.workTag_name_req)) },
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -131,8 +131,8 @@ fun WorkTagInputForm(
             singleLine = true
         )
         OutlinedTextField(
-            value = workTagDetails.price,
-            onValueChange = { onValueChange(workTagDetails.copy(price = it)) },
+            value = tag.price.toString(),
+            onValueChange = { onValueChange(tag.copy(price = it.toDouble())) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             label = { Text(stringResource(R.string.workTag_price)) },
             colors = OutlinedTextFieldDefaults.colors(
@@ -146,8 +146,8 @@ fun WorkTagInputForm(
             singleLine = true
         )
         OutlinedTextField(
-            value = workTagDetails.parent,
-            onValueChange = { onValueChange(workTagDetails.copy(parent = it)) },
+            value = tag.parentId.toString(),
+            onValueChange = { onValueChange(tag.copy(parentId = it.toInt())) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
             label = { Text(stringResource(R.string.workTag_parent)) },
             colors = OutlinedTextFieldDefaults.colors(
@@ -166,13 +166,9 @@ fun WorkTagInputForm(
 @Composable
 private fun WorkTagEntryScreenPreview() {
     WorkGuardTheme {
-        WorkTagEntryBody(workTagUiState = WorkTagUiState(
-            WorkTagUi(
-                id = 1,
-                parent = "Tag 2",
-                name = "WorkTag name",
-                price = "10.00",
-            )
-        ), onWorkTagValueChange = {}, onSaveClick = {})
+        WorkTagEntryBody(
+            sampleTagUiWithParent(),
+            onWorkTagValueChange = {},
+            onSaveClick = {})
     }
 }

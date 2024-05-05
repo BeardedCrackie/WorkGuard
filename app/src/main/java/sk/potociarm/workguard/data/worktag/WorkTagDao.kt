@@ -26,6 +26,12 @@ interface WorkTagDao {
     @Query("SELECT p.* FROM work_tag p JOIN work_tag c on p.id = c.parent_id WHERE c.id = :id")
     fun getWorkTagParent(id: Int): Flow<WorkTag>
 
+    @Query("SELECT * FROM work_tag WHERE parent_id = :id")
+    fun getWorkTagChild(id: Int): Flow<List<WorkTag>>
+
     @Query("SELECT * FROM work_tag")
     fun getAllWorkTags(): Flow<List<WorkTag>>
+
+    @Query("SELECT * FROM work_tag WHERE id != :id")
+    fun getOtherWorkTags(id: Int): Flow<List<WorkTag>>
 }

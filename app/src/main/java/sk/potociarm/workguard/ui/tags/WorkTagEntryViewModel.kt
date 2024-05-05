@@ -10,23 +10,14 @@ class WorkTagEntryViewModel(private val workTagsRepository: WorkTagsRepository) 
     /**
      * Holds current workTag ui state
      */
-    var workTagUiState by mutableStateOf(WorkTagUiState())
+    var workTagUiState by mutableStateOf(WorkTagUi())
         private set
 
     fun updateUiState(workTagDetails: WorkTagUi) {
-        workTagUiState =
-            WorkTagUiState(workTagUi = workTagDetails, isEntryValid = validateInput(workTagDetails))
-    }
-
-    private fun validateInput(uiState: WorkTagUi = workTagUiState.workTagUi): Boolean {
-        return with(uiState) {
-            name.isNotBlank()
-        }
+        workTagUiState = workTagDetails
     }
 
     suspend fun saveWorkTag() {
-        if (validateInput()) {
-            workTagsRepository.insertWorkTag(workTagUiState.workTagUi.toWorkTag())
-        }
+        workTagsRepository.insertWorkTag(workTagUiState.toWorkTag())
     }
 }

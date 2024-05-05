@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import sk.potociarm.workguard.WorkGuardApplication
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsViewModel
+import sk.potociarm.workguard.ui.tags.WorkTagEditViewModel
 import sk.potociarm.workguard.ui.tags.WorkTagEntryViewModel
 import sk.potociarm.workguard.ui.tags.WorkTagListViewModel
 
@@ -20,6 +21,12 @@ object AppViewModelProvider {
 
         initializer {
             WorkTagDetailsViewModel(
+                this.createSavedStateHandle(),
+                workGuardApplication().container.tagRepository
+            )
+        }
+        initializer {
+            WorkTagEditViewModel(
                 this.createSavedStateHandle(),
                 workGuardApplication().container.tagRepository
             )

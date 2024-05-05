@@ -90,6 +90,7 @@ fun AppNavHost(
             })) {
             WorkTagEditScreen(
                 navigateBack = { navController.popBackStack() },
+                onDelete = { navController.popBackStack(WorkTagListDestination.route, false) },
             )
         }
     }

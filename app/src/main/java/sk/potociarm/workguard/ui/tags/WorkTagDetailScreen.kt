@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
-import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.component.RowDescUiComponent
 import sk.potociarm.workguard.ui.component.WorkTagCard
@@ -50,7 +49,6 @@ fun WorkTagDetailsScreen(
     navigateToEditWorkTag: (Int) -> Unit,
     navigateToParentWorkTag: (Int) -> Unit,
     navigateBack: () -> Unit,
-    modifier: Modifier = Modifier,
     viewModel: WorkTagDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val tagUiState = viewModel.uiState.collectAsState()
@@ -65,8 +63,8 @@ fun WorkTagDetailsScreen(
         },
     ) { innerPadding ->
         WorkTagDetailsBody(
-            workTagDetailsUiState = tagUiState.value,
-            parentWorkTagDetailsUiState = parentTagUiState.value,
+            tagUiState = tagUiState.value,
+            parentTagUiState = parentTagUiState.value,
             navigateTParentWorkTag = navigateToParentWorkTag,
             editWorkTag = navigateToEditWorkTag,
             modifier = Modifier
@@ -82,8 +80,8 @@ fun WorkTagDetailsScreen(
 
 @Composable
 private fun WorkTagDetailsBody(
-    workTagDetailsUiState: WorkTagUiState,
-    parentWorkTagDetailsUiState: WorkTagUiState,
+    tagUiState: WorkTagUi,
+    parentTagUiState: WorkTagUi?,
     editWorkTag: (Int) -> Unit,
     navigateTParentWorkTag: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -93,16 +91,15 @@ private fun WorkTagDetailsBody(
 
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        val currentTag = workTagDetailsUiState.workTagUi.toWorkTag()
 
         WorkTagDetailCard(
-            tag = currentTag,
-            parentTag = parentWorkTagDetailsUiState.workTagUi.toWorkTag(),
+            tag = tagUiState,
+            parentTag = parentTagUiState,
             navigateToParentWorkTag = navigateTParentWorkTag
         )
 
         Button(
-            onClick = { editWorkTag(currentTag.id) },
+            onClick = { editWorkTag(tagUiState.id) },
             modifier = Modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.small,
             enabled = true
@@ -115,8 +112,8 @@ private fun WorkTagDetailsBody(
 @Composable
 fun WorkTagDetailCard(
     navigateToParentWorkTag: (Int) -> Unit,
-    tag: WorkTag,
-    parentTag: WorkTag?,
+    tag: WorkTagUi,
+    parentTag: WorkTagUi?,
     modifier: Modifier = Modifier
 ) {
     OutlinedCard(
@@ -160,7 +157,7 @@ fun WorkTagDetailCard(
                 WorkTagCard(
                     tag = parentTag!!, //if parentId is null, then parent does not exists
                     parentTag = null,
-                    modifier = modifier.clickable {
+                    modifier = Modifier.clickable {
                         navigateToParentWorkTag(parentTag.id)
                     }
                 )
@@ -179,8 +176,8 @@ fun WorkTagDetailCard(
 fun WorkTagDetailsPreview() {
     WorkTagDetailCard(
         navigateToParentWorkTag = { },
-        tag = WorkTag(1, 3, "Sample", 0.0),
-        parentTag = WorkTag(2, null, "Sample parent", 10.0),
+        tag = sampleTagUiWithParent(),
+        parentTag = sampleTagUiWithoutParent(),
     )
 }
 
@@ -189,7 +186,7 @@ fun WorkTagDetailsPreview() {
 fun WorkTagDetailsNoParentPreview() {
     WorkTagDetailCard(
         navigateToParentWorkTag = { },
-        tag = WorkTag(1, null, "Sample", 0.0),
+        tag = sampleTagUiWithoutParent(),
         parentTag = null,
     )
 }
@@ -200,24 +197,10 @@ fun WorkTagDetailsNoParentPreview() {
 fun WorkDetailsScreenPreview() {
     WorkGuardTheme {
         WorkTagDetailsBody(
-            WorkTagUiState(
-                workTagUi = WorkTagUi(
-                    id = 1,
-                    name = "Tag-Name",
-                    price = "10.0",
-                    parent = "",
-                )
-            ),
+            tagUiState = sampleTagUiWithParent(),
+            parentTagUiState = sampleTagUiWithoutParent(),
             navigateTParentWorkTag = {},
             editWorkTag = {},
-            parentWorkTagDetailsUiState = WorkTagUiState(
-                workTagUi = WorkTagUi(
-                    id = 0,
-                    name = "Parent-Tag-Name",
-                    price = "12.0",
-                    parent = "",
-                )
-            )
         )
     }
 }
