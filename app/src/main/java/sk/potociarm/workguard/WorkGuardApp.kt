@@ -1,5 +1,6 @@
 package sk.potociarm.workguard
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -31,8 +32,9 @@ fun WorkGuardTopAppBar(
     canNavigateBack: Boolean,
     modifier: Modifier = Modifier,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    navigateUp: () -> Unit = {}
-) {
+    navigateUp: () -> Unit = {},
+    actions: @Composable() (RowScope.() -> Unit) = {},
+    ) {
     CenterAlignedTopAppBar(
         title = { Text(title) },
         modifier = modifier,
@@ -46,6 +48,7 @@ fun WorkGuardTopAppBar(
                     )
                 }
             }
-        }
+        },
+        actions = actions
     )
 }

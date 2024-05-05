@@ -63,7 +63,7 @@ fun WorkTagDetailsScreen(
             WorkGuardTopAppBar(
                 title = stringResource(WorkTagDetailsDestination.titleRes),
                 canNavigateBack = true,
-                navigateUp = navigateBack
+                navigateUp = navigateBack,
             )
         },
         floatingActionButton = {

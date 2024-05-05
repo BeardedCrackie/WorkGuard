@@ -64,8 +64,8 @@ fun WorkTagListScreen(
             WorkGuardTopAppBar(
                 title = stringResource(WorkTagEntryDestination.titleRes),
                 canNavigateBack = true,
+                scrollBehavior = scrollBehavior,
                 navigateUp = navigateBack,
-                scrollBehavior = scrollBehavior
             )
         },
         floatingActionButton = {

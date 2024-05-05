@@ -54,7 +54,7 @@ fun WorkTagEntryScreen(
             WorkGuardTopAppBar(
                 title = stringResource(WorkTagEntryDestination.titleRes),
                 canNavigateBack = canNavigateBack,
-                navigateUp = onNavigateUp
+                navigateUp = onNavigateUp,
             )
         }
     ) { innerPadding ->
