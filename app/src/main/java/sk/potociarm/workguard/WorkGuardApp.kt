@@ -15,8 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import sk.potociarm.workguard.ui.navigation.AppNavHost
+import java.text.NumberFormat
 
-public const val TIMEOUT_MILLIS = 5_000L
+const val TIMEOUT_MILLIS = 5_000L
+val HOUR_RATE_SYMBOL = "${NumberFormat.getNumberInstance().currency?.symbol ?: "€"}/h"
+
 
 /**
  * Top level composable that represents screens for the application.

@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.tags.WorkTagUi
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
@@ -57,12 +58,8 @@ fun WorkTagCard(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = tag.price,
+                    text = "${tag.price} $HOUR_RATE_SYMBOL",
                     style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
-                    text = " €/h", //todo currency
-                    style = MaterialTheme.typography.headlineSmall
                 )
             }
         }

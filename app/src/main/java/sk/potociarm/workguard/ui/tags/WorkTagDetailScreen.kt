@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
@@ -140,7 +141,7 @@ fun WorkTagDetailCard(
             )
             RowDescUiComponent(
                 labelResID = R.string.tag_price,
-                textValue = tag.price,
+                textValue = "${tag.price} $HOUR_RATE_SYMBOL",
             )
             HorizontalDivider(
                 color = MaterialTheme.colorScheme.outlineVariant,

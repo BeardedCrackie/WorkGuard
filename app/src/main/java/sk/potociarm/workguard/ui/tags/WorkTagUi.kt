@@ -1,13 +1,18 @@
 package sk.potociarm.workguard.ui.tags
 
 import sk.potociarm.workguard.data.worktag.WorkTag
+import java.text.NumberFormat
 
 data class WorkTagUi(
     val id: Int = 0,
     var name: String = "",
     var price: String = "0.0",
     var parentId: Int? = null,
-)
+) {
+    fun WorkTagUi.formattedPrice() : String {
+        return "$price ${NumberFormat.getCurrencyInstance()}"
+    }
+}
 
 /**
  * Extension function to convert [WorkTagDetailCard] to [WorkTag]. If the value of [WorkTagDetailCard.price] is

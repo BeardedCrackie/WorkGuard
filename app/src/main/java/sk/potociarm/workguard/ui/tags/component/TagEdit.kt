@@ -22,12 +22,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.tags.WorkTagUi
 import sk.potociarm.workguard.ui.tags.sampleTagList
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithoutParent
+import java.text.NumberFormat
 
 @Composable
 fun WorkTagEditCard(
@@ -61,18 +63,24 @@ fun WorkTagEditCard(
             OutlinedTextField(
                 modifier = modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                value = pastedPrice, //todo currency
+                value = pastedPrice,
                 textStyle = MaterialTheme.typography.headlineSmall,
                 onValueChange = {
                     pastedPrice = it
                     tag.price = it //todo check if it is double
                 },
+                suffix = {
+                    NumberFormat.getNumberInstance().currency?.let {
+                        Text(HOUR_RATE_SYMBOL, style = MaterialTheme.typography.headlineSmall,)
+                         }},
+                /*
                 trailingIcon = {
                     Icon(
                         ImageVector.vectorResource(id = R.drawable.euro),
                         contentDescription = stringResource(R.string.back_button)
                     )
                 },
+                */
                 isError = pastedPrice.toDoubleOrNull() == null,
                 label = { Text(stringResource(id = R.string.tag_price)) }
             )
