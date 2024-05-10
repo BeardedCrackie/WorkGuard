@@ -81,7 +81,7 @@ fun WorkTagEditScreen(
     ) { innerPadding ->
         WorkTagEditBody(
             workTagUiState = viewModel.tagUiState,
-            allTag = tagListState.tagList,
+            otherTags = tagListState.tagList,
             onSave = {
                 coroutineScope.launch {
                     viewModel.updateTag()
@@ -116,7 +116,7 @@ fun WorkTagEditScreen(
 @Composable
 private fun WorkTagEditBody(
     workTagUiState: WorkTagUi,
-    allTag: List<WorkTag>,
+    otherTags: List<WorkTag>,
     onSave: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -127,7 +127,7 @@ private fun WorkTagEditBody(
     ) {
         WorkTagEditCard(
             tag = workTagUiState,
-            allTag = allTag,
+            otherTags = otherTags,
         )
         OutlinedButton(
             onClick = { onSave() },
@@ -147,7 +147,7 @@ fun WorkEditScreenPreview() {
         WorkTagEditBody(
             sampleTagUiWithoutParent(),
             onSave = {},
-            allTag = sampleTagList(),
+            otherTags = sampleTagList(),
         )
     }
 }

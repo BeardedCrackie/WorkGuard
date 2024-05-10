@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -16,10 +15,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import sk.potociarm.workguard.HOUR_RATE_SYMBOL
@@ -34,7 +31,7 @@ import java.text.NumberFormat
 @Composable
 fun WorkTagEditCard(
     tag: WorkTagUi,
-    allTag: List<WorkTag>,
+    otherTags: List<WorkTag>,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -49,7 +46,7 @@ fun WorkTagEditCard(
         ) {
             var pastedName by remember { mutableStateOf(tag.name) }
             if (pastedName == "") pastedName = "Tag Name"
-            var pastedPrice by remember { mutableStateOf(tag.price.toString()) }
+            var pastedPrice by remember { mutableStateOf(tag.price) }
             OutlinedTextField(
                 modifier = modifier.fillMaxWidth(),
                 value = pastedName,
@@ -84,7 +81,7 @@ fun WorkTagEditCard(
                 isError = pastedPrice.toDoubleOrNull() == null,
                 label = { Text(stringResource(id = R.string.tag_price)) }
             )
-            ParentDropdownMenu(tag = tag, allTag = allTag, modifier = modifier.fillMaxWidth(),)
+            ParentDropdownMenu(tag = tag, allTag = otherTags, modifier = modifier.fillMaxWidth())
         }
     }
 }
@@ -94,7 +91,7 @@ fun WorkTagEditCard(
 fun WorkTagEditPreview() {
     WorkTagEditCard(
         tag = sampleTagUiWithParent(),
-        allTag = sampleTagList(),
+        otherTags = sampleTagList(),
     )
 }
 
@@ -103,6 +100,6 @@ fun WorkTagEditPreview() {
 fun WorkTagEditWithoutParentPreview() {
     WorkTagEditCard(
         tag = sampleTagUiWithoutParent(),
-        allTag = sampleTagList()
+        otherTags = sampleTagList()
     )
 }

@@ -15,9 +15,7 @@ data class WorkTagUi(
 }
 
 /**
- * Extension function to convert [WorkTagDetailCard] to [WorkTag]. If the value of [WorkTagDetailCard.price] is
- * not a valid [Double], then the price will be set to 0.0. Similarly if the value of
- * [WorkTagDetailCard.quantity] is not a valid [Int], then the quantity will be set to 0
+ * Extension function to convert [WorkTagUi] to [WorkTag]
  */
 fun WorkTagUi.toWorkTag(): WorkTag = WorkTag(
     id = id,
@@ -36,7 +34,7 @@ fun WorkTag.toWorkTagUi(): WorkTagUi = WorkTagUi(
     parentId = parentId,
 )
 
-public fun sampleTagUiWithParent() = WorkTagUi(2, "Tag-name", 10.0.toString(), 1)
+fun sampleTagUiWithParent() = WorkTagUi(2, "Tag-name", 10.0.toString(), 1)
 
-public fun sampleTagUiWithoutParent() = WorkTagUi(2, "Tag-name", 10.0.toString(), null)
+fun sampleTagUiWithoutParent() = WorkTagUi(2, "Tag-name", 10.0.toString(), null)
 

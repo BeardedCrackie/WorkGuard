@@ -76,10 +76,11 @@ fun WorkTagListScreen(
                 )
             }
         },
-    ) {
+    ) { innerPadding->
         WorkTagBody(
             itemList = workTagListUiState.tagList,
             onItemClick = navigateToWorkTagUpdate,
+            contentPadding = innerPadding
         )
     }
 }
@@ -124,9 +125,8 @@ private fun WorkTagList(
                 tag = item.toWorkTagUi(),
                 parentTag = tags.find { it.id == item.parentId },
                 modifier = Modifier
-                    .padding(contentPadding)
+                    .padding(all = dimensionResource(R.dimen.padding_small))
                     .clickable { onItemClick(item) }
-
             )
         }
     }

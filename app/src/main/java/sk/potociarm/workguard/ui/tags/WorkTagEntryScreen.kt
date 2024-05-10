@@ -91,7 +91,7 @@ fun WorkTagEntryBody(
     ) {
         WorkTagEditCard(
             tag = workTagUiState,
-            allTag = allTag,
+            otherTags = allTag,
         )
         OutlinedButton(
             onClick = { onSave() },
