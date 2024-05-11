@@ -18,7 +18,8 @@ import sk.potociarm.workguard.ui.navigation.AppNavHost
 import java.text.NumberFormat
 
 const val TIMEOUT_MILLIS = 5_000L
-val HOUR_RATE_SYMBOL = "${NumberFormat.getNumberInstance().currency?.symbol ?: "€"}/h"
+val RATE_SYMBOL = NumberFormat.getNumberInstance().currency?.symbol ?: "€"
+val HOUR_RATE_SYMBOL = "$RATE_SYMBOL/h"
 
 
 /**

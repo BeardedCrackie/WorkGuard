@@ -20,5 +20,7 @@ data class WorkEvent (
     @ColumnInfo(name = "start_time") val startTime: String,
     @ColumnInfo(name = "end_time") val endTime: String?,
     var name: String,
-    val description: String
+    val description: String,
+    @ColumnInfo(defaultValue = "0.0") val price: Double,
+    @ColumnInfo(defaultValue = false.toString()) val overridePrice: Boolean
 )

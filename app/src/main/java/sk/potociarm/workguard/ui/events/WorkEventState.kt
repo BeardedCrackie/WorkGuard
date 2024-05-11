@@ -15,17 +15,25 @@ data class WorkEventState(
     val endDateTime: LocalDateTime? = null,
     var name: String = "name",
     val description: String = "desc",
+    val price: Double = 0.0,
+    val overridePrice: Boolean = true
 ) {
     private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
-    fun getRunTime() : String {
-        //val endTime = endDateTime ?: LocalDateTime.now()
-        val endTime = LocalDateTime.now()
+    private fun getRunTimeInSeconds() : Long {
+        val endTime = endDateTime ?: LocalDateTime.now()
+        return startDateTime.until(endTime, ChronoUnit.SECONDS)
+    }
+
+    fun getFormattedRunTime() : String {
+        var runTime = this.getRunTimeInSeconds()
         val formatter = DecimalFormat("00")
-        val hours = formatter.format(startDateTime.until(endTime, ChronoUnit.HOURS))
-        val minutes = formatter.format((endTime.minute - startDateTime.minute) % 60)
-        val seconds = formatter.format((endTime.second - startDateTime.second) % 60)
+        val hours = formatter.format(runTime/3600) //3600s = 1h
+        runTime %= 3600
+        val minutes = formatter.format(runTime/60) //60s = 1m
+        runTime %= 60
+        val seconds = formatter.format(runTime)
         return ("$hours:$minutes:$seconds")
     }
 
@@ -43,6 +51,9 @@ data class WorkEventState(
     fun getEndDate() : String? {
         return endDateTime?.format(dateFormatter)
     }
+    fun computeEarn() : Double {
+        return this.price * (getRunTimeInSeconds().toDouble()/3600)
+    }
 
 }
 
@@ -55,7 +66,9 @@ fun WorkEventState.toWorkEvent(): WorkEvent = WorkEvent(
     name = name,
     startTime = startDateTime.toString(),
     endTime = endDateTime?.toString(),
-    description = description
+    description = description,
+    price = price,
+    overridePrice = overridePrice
 )
 
 /**
@@ -67,7 +80,7 @@ fun WorkEvent.toWorkEventState(): WorkEventState = WorkEventState(
     tagId = tag,
     startDateTime = LocalDateTime.parse(startTime),
     endDateTime = if (endTime != null) LocalDateTime.parse(endTime) else null,
-    description = description
+    description = description,
 )
 
 fun sampleEventWithTag(): WorkEventState {
