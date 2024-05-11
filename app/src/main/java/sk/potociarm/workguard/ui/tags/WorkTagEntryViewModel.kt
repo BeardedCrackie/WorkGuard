@@ -9,11 +9,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import sk.potociarm.workguard.TIMEOUT_MILLIS
 import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
-class WorkTagEntryViewModel(private val workTagsRepository: WorkTagsRepository) : ViewModel() {
+open class WorkTagEntryViewModel(private val workTagsRepository: WorkTagsRepository) : ViewModel() {
 
-    val allTagsUiState: StateFlow<WorkTagUiList> =
+    open val otherTagsUiState: StateFlow<WorkTagUiList> =
         workTagsRepository.getAllWorkTagsStream().map {
             WorkTagUiList(it)
         }.stateIn(
@@ -25,15 +26,16 @@ class WorkTagEntryViewModel(private val workTagsRepository: WorkTagsRepository) 
     /**
      * Holds current workTag ui state
      */
-    var tagUiState by mutableStateOf(WorkTagUi())
-        private set
+    var tagState by mutableStateOf(WorkTagState())
+        protected set
 
-    suspend fun saveWorkTag() {
-        workTagsRepository.insertWorkTag(tagUiState.toWorkTag())
+    open suspend fun saveWorkTag() {
+        workTagsRepository.insertWorkTag(tagState.toWorkTag())
     }
 
-    companion object {
-        private const val TIMEOUT_MILLIS = 5_000L
+    fun updateUiState(newWorkTagState: WorkTagState) {
+        tagState = newWorkTagState
+        newWorkTagState.validate()
     }
 
 }

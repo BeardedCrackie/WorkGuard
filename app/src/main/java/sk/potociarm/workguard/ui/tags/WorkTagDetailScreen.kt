@@ -100,8 +100,8 @@ fun WorkTagDetailsScreen(
 
 @Composable
 private fun WorkTagDetailsBody(
-    tagUiState: WorkTagUi,
-    parentTagUiState: WorkTagUi?,
+    tagUiState: WorkTagState,
+    parentTagUiState: WorkTagState?,
     navigateTParentWorkTag: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -122,8 +122,8 @@ private fun WorkTagDetailsBody(
 @Composable
 fun WorkTagDetailCard(
     navigateToParentWorkTag: (Int) -> Unit,
-    tag: WorkTagUi,
-    parentTag: WorkTagUi?,
+    tag: WorkTagState,
+    parentTag: WorkTagState?,
     modifier: Modifier = Modifier
 ) {
     Card(

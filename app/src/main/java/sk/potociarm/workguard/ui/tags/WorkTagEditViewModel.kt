@@ -1,10 +1,6 @@
 package sk.potociarm.workguard.ui.tags
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,14 +15,12 @@ import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 class WorkTagEditViewModel(
     savedStateHandle: SavedStateHandle,
     private val workTagsRepository: WorkTagsRepository
-) : ViewModel() {
+) : WorkTagEntryViewModel(workTagsRepository) {
 
     private val itemId: Int = checkNotNull(savedStateHandle[WorkTagDetailsDestination.ID_ARG])
-    var tagUiState by mutableStateOf(WorkTagUi())
-    var parentTagUiState by mutableStateOf(WorkTagUi())
 
-    val otherTagsUiState: StateFlow<WorkTagUiList> =
-        workTagsRepository.getOtherWorkTagsStream(tagUiState.id).map {
+    override val otherTagsUiState: StateFlow<WorkTagUiList> =
+        workTagsRepository.getOtherWorkTagsStream(tagState.id).map {
             WorkTagUiList(it)
         }.stateIn(
             scope = viewModelScope,
@@ -36,11 +30,7 @@ class WorkTagEditViewModel(
 
     init {
         viewModelScope.launch {
-            tagUiState = workTagsRepository.getWorkTagStream(itemId)
-                .filterNotNull()
-                .first()
-                .toWorkTagUi()
-            parentTagUiState = workTagsRepository.getWorkTagParentStream(itemId)
+            tagState = workTagsRepository.getWorkTagStream(itemId)
                 .filterNotNull()
                 .first()
                 .toWorkTagUi()
@@ -52,18 +42,18 @@ class WorkTagEditViewModel(
      * and set child.parentTag to tag.parentTag for all child tags.
      */
     suspend fun deleteTag() {
-        val newParent = tagUiState.parentId
+        val newParent = tagState.parentId
         for (childTag in otherTagsUiState.value.tagList) {
             if (childTag.parentId == itemId) {
                 childTag.parentId = newParent
                 workTagsRepository.updateWorkTag(childTag)
             }
         }
-        workTagsRepository.deleteWorkTag(tagUiState.toWorkTag())
+        workTagsRepository.deleteWorkTag(tagState.toWorkTag())
     }
 
-    suspend fun updateTag() {
-        workTagsRepository.updateWorkTag(tagUiState.toWorkTag())
+    override suspend fun saveWorkTag() {
+        workTagsRepository.updateWorkTag(tagState.toWorkTag())
     }
 
 }

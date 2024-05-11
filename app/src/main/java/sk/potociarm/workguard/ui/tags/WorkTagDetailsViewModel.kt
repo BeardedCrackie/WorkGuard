@@ -11,13 +11,10 @@ import kotlinx.coroutines.flow.stateIn
 import sk.potociarm.workguard.TIMEOUT_MILLIS
 import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
-class WorkTagDetailsViewModel(
-    savedStateHandle: SavedStateHandle,
-    workTagRepository: WorkTagsRepository
-) : ViewModel() {
+class WorkTagDetailsViewModel(savedStateHandle: SavedStateHandle,workTagRepository: WorkTagsRepository) : ViewModel() {
     private val itemId: Int = checkNotNull(savedStateHandle[WorkTagDetailsDestination.ID_ARG])
 
-    val uiState: StateFlow<WorkTagUi> =
+    val uiState: StateFlow<WorkTagState> =
         workTagRepository.getWorkTagStream(itemId)
             .filterNotNull()
             .map {
@@ -26,10 +23,10 @@ class WorkTagDetailsViewModel(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = WorkTagUi()
+                initialValue = WorkTagState()
             )
 
-    val uiParentState: StateFlow<WorkTagUi> =
+    val uiParentState: StateFlow<WorkTagState> =
         workTagRepository.getWorkTagParentStream(itemId)
             .filterNotNull()
             .map {
@@ -38,7 +35,7 @@ class WorkTagDetailsViewModel(
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = WorkTagUi()
+                initialValue = WorkTagState()
             )
 
 }

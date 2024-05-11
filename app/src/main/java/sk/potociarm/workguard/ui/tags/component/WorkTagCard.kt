@@ -13,14 +13,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.data.worktag.WorkTag
-import sk.potociarm.workguard.ui.tags.WorkTagUi
+import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 import sk.potociarm.workguard.ui.tags.sampleTagWithoutParent
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 @Composable
 fun WorkTagCard(
-    tag: WorkTagUi,
+    tag: WorkTagState,
     parentTag: WorkTag?,
     modifier: Modifier = Modifier
 ) {

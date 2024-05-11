@@ -1,10 +1,7 @@
 package sk.potociarm.workguard.ui.tags
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,8 +9,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,10 +30,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
-import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.navigation.NavDestination
-import sk.potociarm.workguard.ui.tags.component.WorkTagEditCard
+import sk.potociarm.workguard.ui.tags.component.WorkTagEditBody
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagEditDestination : NavDestination {
@@ -80,12 +74,12 @@ fun WorkTagEditScreen(
         },
     ) { innerPadding ->
         WorkTagEditBody(
-            workTagUiState = viewModel.tagUiState,
+            tagUiState = viewModel.tagState,
             onTagStateChange = viewModel::updateUiState,
             otherTags = tagListState.tagList,
-            onSave = {
+            onButtonClick = {
                 coroutineScope.launch {
-                    viewModel.updateTag()
+                    viewModel.saveWorkTag()
                     navigateBack()
                 }
             },
@@ -114,32 +108,6 @@ fun WorkTagEditScreen(
     }
 }
 
-@Composable
-private fun WorkTagEditBody(
-    workTagUiState: WorkTagUi,
-    otherTags: List<WorkTag>,
-    onSave: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
-
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
-    ) {
-        WorkTagEditCard(
-            tag = workTagUiState,
-            otherTags = otherTags,
-        )
-        OutlinedButton(
-            onClick = { onSave() },
-            shape = MaterialTheme.shapes.small,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(stringResource(R.string.save_action))
-        }
-    }
-}
-
 
 @Preview(showBackground = true)
 @Composable
@@ -154,7 +122,6 @@ fun WorkEditScreenPreview() {
         )
     }
 }
-
 
 @Composable
 private fun DeleteConfirmationDialog(
