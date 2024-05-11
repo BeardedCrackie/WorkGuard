@@ -1,9 +1,10 @@
 package sk.potociarm.workguard.data
 
-import androidx.room.Database
-import androidx.room.RoomDatabase
 import android.content.Context
+import androidx.room.AutoMigration
+import androidx.room.Database
 import androidx.room.Room
+import androidx.room.RoomDatabase
 import sk.potociarm.workguard.data.workevent.WorkEvent
 import sk.potociarm.workguard.data.workevent.WorkEventDao
 import sk.potociarm.workguard.data.worktag.WorkTag
@@ -14,7 +15,11 @@ import sk.potociarm.workguard.data.worktag.WorkTagDao
         WorkEvent::class,
         WorkTag::class
     ],
-    version = 1, exportSchema = false
+    version = 2,
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ],
+    exportSchema = true
 )
 abstract class WorkGuardDatabase : RoomDatabase() {
     abstract fun workEventDao(): WorkEventDao
