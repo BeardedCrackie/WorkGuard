@@ -10,11 +10,11 @@ import java.time.temporal.ChronoUnit
 
 data class WorkEventState(
     val id: Int = 0,
-    val tagId: Int?,
-    val startDateTime: LocalDateTime,
-    val endDateTime: LocalDateTime?,
-    var name: String,
-    val description: String,
+    val tagId: Int? = null,
+    val startDateTime: LocalDateTime = LocalDateTime.now(),
+    val endDateTime: LocalDateTime? = null,
+    var name: String = "name",
+    val description: String = "desc",
 ) {
     private val timeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss")
     private val dateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
