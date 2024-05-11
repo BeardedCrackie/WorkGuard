@@ -16,6 +16,7 @@ class OfflineWorkTagsRepository(private val workTagDao: WorkTagDao) : WorkTagsRe
     override suspend fun insertWorkTag(workTag: WorkTag) = workTagDao.insert(workTag)
 
     override suspend fun deleteWorkTag(workTag: WorkTag) { workTagDao.delete(workTag) }
+    override suspend fun deleteById(id: Int) { workTagDao.deleteById(id) }
 
     override suspend fun updateWorkTag(workTag: WorkTag) = workTagDao.update(workTag)
 }

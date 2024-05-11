@@ -20,6 +20,9 @@ interface WorkTagDao {
     @Delete
     suspend fun delete(workTag: WorkTag)
 
+    @Query("DELETE FROM work_tag WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
     @Query("SELECT * FROM work_tag WHERE id = :id")
     fun getWorkTag(id: Int): Flow<WorkTag?>
 

@@ -49,7 +49,7 @@ class WorkTagEditViewModel(
                 workTagsRepository.updateWorkTag(childTag)
             }
         }
-        workTagsRepository.deleteWorkTag(tagState.toWorkTag())
+        workTagsRepository.deleteById(tagState.id)
     }
 
     override suspend fun saveWorkTag() {

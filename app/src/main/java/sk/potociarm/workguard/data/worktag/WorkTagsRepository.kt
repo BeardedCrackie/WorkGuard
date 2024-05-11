@@ -36,6 +36,11 @@ interface WorkTagsRepository {
     suspend fun deleteWorkTag(workTag: WorkTag)
 
     /**
+     * Delete WorkTag with selected ID from the data source
+     */
+    suspend fun deleteById(id: Int)
+
+    /**
      * Update WorkTag in the data source
      */
     suspend fun updateWorkTag(workTag: WorkTag)
