@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.data.worktag.WorkTag
-import sk.potociarm.workguard.ui.tags.WorkTagUi
+import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.sampleTagList
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 
@@ -26,7 +26,8 @@ import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 @Composable
 fun ParentDropdownMenu(
     modifier: Modifier = Modifier,
-    tag: WorkTagUi,
+    tag: WorkTagState,
+    onTagStateChange: (WorkTagState) -> Unit,
     allTag: List<WorkTag>,
     startExpanded: Boolean = false,
 ) {
@@ -56,7 +57,7 @@ fun ParentDropdownMenu(
                     Text(stringResource(id = R.string.no_tag_parent))
                 },
                 onClick = {
-                    tag.parentId = null
+                    onTagStateChange(tag.copy(parentId = null))
                     expanded = false
                 },
                 contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -68,7 +69,7 @@ fun ParentDropdownMenu(
                         Text(currentTag.name)
                     },
                     onClick = {
-                        tag.parentId = currentTag.id
+                        onTagStateChange(tag.copy(parentId = currentTag.id))
                         expanded = false
                     },
                     contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
@@ -85,7 +86,8 @@ fun ParentDropdownMenuPreview() {
     ParentDropdownMenu(
         tag = sampleTagUiWithParent(),
         allTag = sampleTagList(),
-        startExpanded = true
+        startExpanded = true,
+        onTagStateChange = {}
     )
 }
 

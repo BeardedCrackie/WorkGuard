@@ -1,5 +1,6 @@
 package sk.potociarm.workguard.ui.tags.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,13 +8,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -22,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.data.worktag.WorkTag
-import sk.potociarm.workguard.ui.tags.WorkTagUi
+import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.sampleTagList
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithoutParent
@@ -30,7 +28,8 @@ import java.text.NumberFormat
 
 @Composable
 fun WorkTagEditCard(
-    tag: WorkTagUi,
+    tag: WorkTagState,
+    onTagStateChange: (WorkTagState) -> Unit,
     otherTags: List<WorkTag>,
     modifier: Modifier = Modifier,
 ) {
@@ -40,35 +39,32 @@ fun WorkTagEditCard(
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     ) {
-
         Column(
             modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
         ) {
-            var pastedName by remember { mutableStateOf(tag.name) }
-            if (pastedName == "") pastedName = "Tag Name"
-            var pastedPrice by remember { mutableStateOf(tag.price) }
+            //var pastedName by remember { mutableStateOf(tag.name) }
+            //var pastedPrice by remember { mutableStateOf(tag.price) }
             OutlinedTextField(
                 modifier = modifier.fillMaxWidth(),
-                value = pastedName,
+                value = tag.name,
                 textStyle = MaterialTheme.typography.headlineSmall,
                 onValueChange = {
-                    pastedName = it
-                    tag.name = it},
-                isError = pastedPrice == "",
+                    onTagStateChange(tag.copy(name = it))
+                },
+                isError = tag.name == "",
                 label = { Text(stringResource(id = R.string.workTag_name_req)) }
             )
             OutlinedTextField(
                 modifier = modifier.fillMaxWidth(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                value = pastedPrice,
+                value = tag.price,
                 textStyle = MaterialTheme.typography.headlineSmall,
                 onValueChange = {
-                    pastedPrice = it
-                    tag.price = it //todo check if it is double
+                    onTagStateChange(tag.copy(price = it))
                 },
                 suffix = {
                     NumberFormat.getNumberInstance().currency?.let {
-                        Text(HOUR_RATE_SYMBOL, style = MaterialTheme.typography.headlineSmall,)
+                        Text(HOUR_RATE_SYMBOL, style = MaterialTheme.typography.headlineSmall)
                          }},
                 /*
                 trailingIcon = {
@@ -78,10 +74,39 @@ fun WorkTagEditCard(
                     )
                 },
                 */
-                isError = pastedPrice.toDoubleOrNull() == null,
+                isError = tag.price.toDoubleOrNull() == null,
                 label = { Text(stringResource(id = R.string.tag_price)) }
             )
-            ParentDropdownMenu(tag = tag, allTag = otherTags, modifier = modifier.fillMaxWidth())
+            ParentDropdownMenu(tag = tag, onTagStateChange = onTagStateChange,allTag = otherTags, modifier = modifier.fillMaxWidth())
+        }
+    }
+}
+
+@Composable
+fun WorkTagEditBody(
+    modifier: Modifier = Modifier,
+    tagUiState: WorkTagState,
+    onTagStateChange: (WorkTagState) -> Unit,
+    otherTags: List<WorkTag>,
+    onButtonClick: () -> Unit,
+    buttonLabelResource: Int = R.string.add_work_tag
+) {
+    Column(
+        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+    ) {
+        WorkTagEditCard(
+            tag = tagUiState,
+            otherTags = otherTags,
+            onTagStateChange = onTagStateChange
+        )
+        OutlinedButton(
+            onClick = { onButtonClick() },
+            enabled = tagUiState.valid,
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(stringResource(buttonLabelResource))
         }
     }
 }
@@ -92,14 +117,18 @@ fun WorkTagEditPreview() {
     WorkTagEditCard(
         tag = sampleTagUiWithParent(),
         otherTags = sampleTagList(),
+        onTagStateChange = {}
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun WorkTagEditWithoutParentPreview() {
-    WorkTagEditCard(
-        tag = sampleTagUiWithoutParent(),
-        otherTags = sampleTagList()
+fun WorkTagEditBodyPreview() {
+    WorkTagEditBody(
+        onButtonClick = {},
+        onTagStateChange = {},
+        tagUiState = sampleTagUiWithoutParent(),
+        otherTags = sampleTagList(),
+        buttonLabelResource = R.string.save_action
     )
 }

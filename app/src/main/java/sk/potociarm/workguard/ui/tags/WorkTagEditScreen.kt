@@ -81,6 +81,7 @@ fun WorkTagEditScreen(
     ) { innerPadding ->
         WorkTagEditBody(
             workTagUiState = viewModel.tagUiState,
+            onTagStateChange = viewModel::updateUiState,
             otherTags = tagListState.tagList,
             onSave = {
                 coroutineScope.launch {
@@ -145,8 +146,10 @@ private fun WorkTagEditBody(
 fun WorkEditScreenPreview() {
     WorkGuardTheme {
         WorkTagEditBody(
-            sampleTagUiWithoutParent(),
-            onSave = {},
+            modifier = Modifier,
+            tagUiState = sampleTagUiWithoutParent(),
+            onTagStateChange = {},
+            onButtonClick = {},
             otherTags = sampleTagList(),
         )
     }

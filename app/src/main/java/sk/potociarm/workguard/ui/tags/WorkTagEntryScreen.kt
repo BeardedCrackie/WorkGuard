@@ -58,10 +58,11 @@ fun WorkTagEntryScreen(
             )
         }
     ) { innerPadding ->
-        WorkTagEntryBody(
-            workTagUiState = viewModel.tagUiState,
-            allTag = tagListState.tagList,
-            onSave = {
+        WorkTagEditBody(
+            tagUiState = viewModel.tagState,
+            onTagStateChange = viewModel::updateUiState,
+            otherTags = tagListState.tagList,
+            onButtonClick = {
                 coroutineScope.launch {
                     viewModel.saveWorkTag()
                     navigateBack()
