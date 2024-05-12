@@ -24,5 +24,13 @@ interface WorkEventDao {
     fun getWorkEvent(id: Int): Flow<WorkEvent>
 
     @Query("SELECT * from work_event")
-    fun getAllWorkEvents(): Flow<List<WorkEvent>>
+    fun getAllWorkEvents(): List<WorkEvent>
+    @Query("SELECT * from work_event")
+    fun getAllWorkEventsFlow(): Flow<List<WorkEvent>>
+
+    /*
+    @Query("SELECT * from work_event GROUP BY start_date")
+    fun getWorkEventsMapByDay(): Map<String, List<WorkEvent>>
+
+     */
 }

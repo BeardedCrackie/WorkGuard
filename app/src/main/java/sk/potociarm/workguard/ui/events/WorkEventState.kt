@@ -1,5 +1,6 @@
 package sk.potociarm.workguard.ui.events
 
+import sk.potociarm.workguard.data.workevent.Timestamp
 import sk.potociarm.workguard.data.workevent.WorkEvent
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.tags.WorkTagState
@@ -64,8 +65,14 @@ fun WorkEventState.toWorkEvent(): WorkEvent = WorkEvent(
     id = id,
     tag = tagId,
     name = name,
-    startTime = startDateTime.toString(),
-    endTime = endDateTime?.toString(),
+    startTime = Timestamp(
+        date = startDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+        time = startDateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    ),
+    endTime = if (endDateTime == null) null else Timestamp(
+        date = endDateTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+        time = endDateTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))
+    ),
     description = description,
     price = price,
     overridePrice = overridePrice
@@ -78,10 +85,18 @@ fun WorkEvent.toWorkEventState(): WorkEventState = WorkEventState(
     id = id,
     name = name,
     tagId = tag,
-    startDateTime = LocalDateTime.parse(startTime),
-    endDateTime = if (endTime != null) LocalDateTime.parse(endTime) else null,
+    startDateTime = LocalDateTime.parse("${startTime.date} ${startTime.time}",
+        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")),
+    endDateTime = if (endTime != null) LocalDateTime.parse("${endTime.date} ${endTime.time}",
+        DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")) else null,
     description = description,
 )
+
+data class WorkEventListState(
+    val eventTagsList: List<WorkEvent> = listOf()
+)
+
+data class WorkEventStateMap(val eventTagsMap: Map<String, List<WorkEvent>> = mapOf())
 
 fun sampleEventWithTag(): WorkEventState {
     return WorkEventState(
@@ -116,3 +131,36 @@ fun sampleEventWithoutTag(): WorkEventState {
     )
 }
 
+fun sampleEventMap(): HashMap<String, List<WorkEvent>> {
+    val map = HashMap<String, List<WorkEvent>>()
+    map["01.01.2022"] = sampleEventList()
+    map["02.02.2022"] = sampleEventList()
+    return map
+}
+fun sampleEmptyEventMap(): HashMap<String, List<WorkEvent>> {
+    return HashMap()
+}
+
+
+fun sampleEventList(): List<WorkEvent> {
+    return listOf(
+        WorkEvent(id = 1, price = 10.0, tag = null,
+            startTime = Timestamp(date = "01.01.2022", time = "10:10:10"),
+            endTime = Timestamp(date = "01.01.2022", time = "12:12:12"),
+            name = "first event", description = "first event desc",
+            overridePrice = false
+        ),
+        WorkEvent(id = 2, price = 10.0, tag = null,
+            startTime = Timestamp(date = "01.01.2022", time = "10:10:10"),
+            endTime = Timestamp(date = "01.01.2022", time = "12:12:12"),
+            name = "first event", description = "first event desc",
+            overridePrice = false
+        ),
+        WorkEvent(id = 3, price = 10.0, tag = null,
+            startTime = Timestamp(date = "01.01.2022", time = "10:10:10"),
+            endTime = Timestamp(date = "01.01.2022", time = "12:12:12"),
+            name = "first event", description = "first event desc",
+            overridePrice = false
+        )
+    )
+}
