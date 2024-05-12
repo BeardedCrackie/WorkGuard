@@ -11,13 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import sk.potociarm.workguard.RATE_SYMBOL
+import com.example.compose.WorkGuardTheme
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.events.WorkEventState
 import sk.potociarm.workguard.ui.events.sampleEventWithTag
 import sk.potociarm.workguard.ui.events.sampleEventWithoutTag
 import sk.potociarm.workguard.ui.tags.sampleTagWithoutParent
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 
 @Composable
@@ -29,7 +28,7 @@ fun WorkEventCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.inversePrimary,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     ) {
@@ -39,12 +38,12 @@ fun WorkEventCard(
             Column {
                 Text(
                     text = event.name,
-                    style = MaterialTheme.typography.headlineMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 if (eventTag != null) {
                     Text(
                         text = eventTag.name,
-                        style = MaterialTheme.typography.headlineSmall
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
             }
@@ -53,13 +52,16 @@ fun WorkEventCard(
                 horizontalAlignment = Alignment.End
             ) {
                 Text(
-                    text = "${event.computeEarn()} $RATE_SYMBOL",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
                     text = event.getRunTime().toString(),
+                    style = MaterialTheme.typography.titleLarge
+                )
+                /*
+                Text(
+                    text = "${event.computeEarn()} $RATE_SYMBOL",
                     style = MaterialTheme.typography.headlineSmall
                 )
+                 */
+
             }
         }
     }

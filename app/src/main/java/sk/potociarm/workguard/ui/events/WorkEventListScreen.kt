@@ -4,12 +4,16 @@ package sk.potociarm.workguard.ui.events
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -31,14 +35,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.compose.WorkGuardTheme
 import kotlinx.datetime.LocalDate
 import sk.potociarm.workguard.R
+import sk.potociarm.workguard.RATE_SYMBOL
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.workevent.WorkEvent
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.events.component.WorkEventCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkEventListDestination : NavDestination {
     override val route = "event_list"
@@ -101,7 +106,7 @@ private fun WorkEventListBody(
     ) {
         if (workEventsMap.isEmpty()) {
             Text(
-                text = stringResource(R.string.no_tag_description),
+                text = stringResource(R.string.no_event_description),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(contentPadding),
@@ -130,40 +135,107 @@ private fun WorkEventDateList(
 
     var isExpanded by remember { mutableStateOf(expanded) }
 
-    Column(
+    Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = { isExpanded = !isExpanded })
-            .padding(contentPadding)
+            .padding(all = dimensionResource(R.dimen.padding_small)),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
     ) {
-        // Show the date header
-        WorkEventDateHeader(date = date)
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { isExpanded = !isExpanded })
+                .padding(contentPadding),
+        ) {
+            // Show the date header
+            WorkEventDateHeader(
+                modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_extra_small)),
+                date = date,
+                dateWorkDuration = PrintRunningTime(eventsInDate),
+                dateWorkEarn = PrintDateEarn(eventsInDate)
+            )
 
-        // Show the work events if the Column is expanded
-        if (isExpanded) {
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                items(eventsInDate) { workEvent ->
-                    WorkEventCard(
-                        event = workEvent.toWorkEventState(),
-                        eventTag = null, //todo null tag
-                        modifier = Modifier
-                            .padding(contentPadding)
-                            .clickable { onItemClick(workEvent) }
-                    )
-                }
+            // Show the work events if the Column is expanded
+            if (isExpanded) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.inversePrimary,
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    ))
+                    {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            items(eventsInDate) { workEvent ->
+                                WorkEventCard(
+                                    event = workEvent.toWorkEventState(),
+                                    eventTag = null, //todo null tag
+                                    modifier = Modifier
+                                        .padding(all = dimensionResource(id = R.dimen.padding_extra_small))
+                                        .clickable { onItemClick(workEvent) }
+                                )
+                            }
+                        }
+                    }
             }
         }
     }
 }
 
+fun PrintDateEarn(eventsInDate: List<WorkEvent>): String {
+    var totalEarn = 0.0
+    for (event in eventsInDate) {
+        totalEarn += event.toWorkEventState().computeEarn()
+    }
+    return "$totalEarn $RATE_SYMBOL"
+}
+
+fun PrintRunningTime(eventsInDate: List<WorkEvent>): String {
+    var totalRunTime = 0
+    for (event in eventsInDate) {
+        totalRunTime += event.toWorkEventState().getRunTime().toSecondOfDay()
+    }
+    val hours = totalRunTime / 3600
+    totalRunTime %= 3600
+    val minutes = totalRunTime / 60
+    totalRunTime %= 60
+    return "$hours:$minutes"
+}
+
 @Composable
-fun WorkEventDateHeader(date: LocalDate) {
-    Text(
-        text = date.toString(),
-        style = MaterialTheme.typography.headlineSmall
+fun WorkEventDateHeader(
+    modifier: Modifier = Modifier,
+    date: LocalDate,
+    dateWorkDuration: String,
+    dateWorkEarn: String
+) {
+    Row(
+        modifier = modifier,
     )
+    {
+        Column()
+        {
+            Text(
+                text = date.toString(),
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Column(
+            horizontalAlignment = Alignment.End
+        ) {
+            Text(
+                text = dateWorkDuration,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                text = dateWorkEarn,
+                style = MaterialTheme.typography.headlineSmall
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)

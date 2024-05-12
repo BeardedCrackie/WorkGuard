@@ -40,4 +40,5 @@
     <string name="work_event_run_time">Running for</string>
     <string name="work_event_start_date">Start Date</string>
     <string name="work_event_end_date">End Date</string>
+    <string name="no_event_description">No event provided</string>
 </resources>

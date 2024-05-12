@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.compose.WorkGuardTheme
 import kotlinx.coroutines.launch
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.events.component.WorkEventForm
 import sk.potociarm.workguard.ui.navigation.NavDestination
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkEventEntryDestination : NavDestination {
     override val route = "workTag_entry"

@@ -27,13 +27,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.compose.WorkGuardTheme
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.navigation.NavDestination
 import sk.potociarm.workguard.ui.tags.component.WorkTagCard
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagListDestination : NavDestination {
     override val route = "tag_list"

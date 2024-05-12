@@ -11,12 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.compose.WorkGuardTheme
 import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
 import sk.potociarm.workguard.ui.tags.sampleTagWithoutParent
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 @Composable
 fun WorkTagCard(

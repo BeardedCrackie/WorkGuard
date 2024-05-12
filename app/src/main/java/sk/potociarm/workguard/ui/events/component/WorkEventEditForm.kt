@@ -20,9 +20,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.compose.WorkGuardTheme
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.ui.events.WorkEventState
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 @Composable
 fun WorkEventForm(

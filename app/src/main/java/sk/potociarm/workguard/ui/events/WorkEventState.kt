@@ -20,13 +20,13 @@ data class WorkEventState(
     val price: Double = 0.0,
     val overridePrice: Boolean = true
 ) {
-    private fun getRunTimeInSeconds() : Long {
+    private fun getRunTimeInSeconds() : Int {
         return ((endTime?.toSecondOfDay() ?: (LocalDateTime.now().toLocalTime()
-            .toSecondOfDay() - startTime.toSecondOfDay()))).toLong()
+            .toSecondOfDay() - startTime.toSecondOfDay())))
     }
 
     fun getRunTime() : LocalTime {
-        return LocalTime.fromSecondOfDay(getRunTimeInSeconds().toInt())
+        return LocalTime.fromSecondOfDay(getRunTimeInSeconds())
     }
 
     fun computeEarn() : Double {
@@ -61,6 +61,7 @@ fun WorkEvent.toWorkEventState(): WorkEventState = WorkEventState(
     startTime = LocalTime.fromSecondOfDay(startTime),
     endTime = endTime?.let { LocalTime.fromSecondOfDay(it) },
     description = description,
+    price = price
 )
 
 data class WorkEventListState(
@@ -80,7 +81,8 @@ fun sampleRunningEventWithTag(): WorkEventState {
         id = 1,
         date = LocalDate(year = 2024, month = Month.JANUARY, dayOfMonth = 1),
         startTime = LocalTime(hour = 10, minute = 10),
-        name = "Test name", description = "Test desc"
+        name = "Test name", description = "Test desc",
+        price = 10.5
     )
 }
 

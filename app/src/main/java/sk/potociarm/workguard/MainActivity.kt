@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Surface
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
+import com.example.compose.WorkGuardTheme
 
 
 class MainActivity : ComponentActivity() {

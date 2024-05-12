@@ -32,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.compose.WorkGuardTheme
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
@@ -41,7 +42,7 @@ import sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination
 import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.component.WorkTagCard
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
-import sk.potociarm.workguard.ui.theme.WorkGuardTheme
+
 
 object WorkEventDetailsDestination : NavDestination {
     override val route = "work_event_details"
