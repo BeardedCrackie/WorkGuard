@@ -8,6 +8,10 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import sk.potociarm.workguard.ui.events.WorkEventEntryDestination
+import sk.potociarm.workguard.ui.events.WorkEventEntryScreen
+import sk.potociarm.workguard.ui.events.WorkEventListDestination
+import sk.potociarm.workguard.ui.events.WorkEventListScreen
 import sk.potociarm.workguard.ui.home.HomeScreen
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsScreen
@@ -91,6 +95,22 @@ fun AppNavHost(
             WorkTagEditScreen(
                 navigateBack = { navController.popBackStack() },
                 onDelete = { navController.popBackStack(WorkTagListDestination.route, false) },
+            )
+        }
+
+        // ----- Work Event List screen -----
+        composable(route = WorkEventListDestination.route) {
+            WorkEventListScreen(
+                navigateToWorkEventEntry = { navController.navigate(WorkEventEntryDestination.route) },
+                navigateToWorkEventUpdate = { /*TODO*/ },
+                navigateBack = {  navController.popBackStack() })
+        }
+
+        // ----- Work Event Entry screen -----
+        composable(route = WorkEventEntryDestination.route) {
+            WorkEventEntryScreen(
+                navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.popBackStack() }
             )
         }
     }

@@ -11,6 +11,9 @@ interface WorkEventsRepository {
      */
     fun getAllWorkEventsStream(): Flow<List<WorkEvent>>
 
+    fun getAllWorkEvents(): List<WorkEvent>
+
+
     /**
      * Retrieve an WorkEvent from the given data source that matches with the [id].
      */
@@ -30,4 +33,9 @@ interface WorkEventsRepository {
      * Update WorkEvent in the data source
      */
     suspend fun updateWorkEvent(workEvent: WorkEvent)
+
+    //fun getWorkEventsMapByDay(): Map<Timestamp, List<WorkEvent>>
+
+    fun getWorkEventsGroupedByDay(): Flow<Map<String, List<WorkEvent>>>
+
 }
