@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
-import sk.potociarm.workguard.ui.events.component.WorkEventForm
+import sk.potociarm.workguard.ui.events.component.WorkEventFormCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
 
 object WorkEventEntryDestination : NavDestination {
@@ -44,7 +44,7 @@ fun WorkEventEntryScreen(
             )
         }
     ) { innerPadding ->
-        WorkEventForm(
+        WorkEventFormCard(
             initialWorkEvent = viewModel.eventState,
             onButtonClick = {
                 coroutineScope.launch {
@@ -62,7 +62,7 @@ fun WorkEventEntryScreen(
 @Composable
 fun WorkEntryScreenPreview() {
     WorkGuardTheme {
-        WorkEventForm(
+        WorkEventFormCard(
             modifier = Modifier,
             onButtonClick = {},
             onEventStateChange = {}
