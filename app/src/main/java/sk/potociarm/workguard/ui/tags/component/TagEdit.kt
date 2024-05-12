@@ -27,20 +27,13 @@ import sk.potociarm.workguard.ui.tags.sampleTagUiWithoutParent
 import java.text.NumberFormat
 
 @Composable
-fun WorkTagEditCard(
+fun WorkTagForm(
     tag: WorkTagState,
     onTagStateChange: (WorkTagState) -> Unit,
     otherTags: List<WorkTag>,
     modifier: Modifier = Modifier,
 ) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        )
-    ) {
         Column(
-            modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
         ) {
             //var pastedName by remember { mutableStateOf(tag.name) }
             //var pastedPrice by remember { mutableStateOf(tag.price) }
@@ -79,11 +72,10 @@ fun WorkTagEditCard(
             )
             ParentDropdownMenu(tag = tag, onTagStateChange = onTagStateChange,allTag = otherTags, modifier = modifier.fillMaxWidth())
         }
-    }
 }
 
 @Composable
-fun WorkTagEditBody(
+fun WorkTagFormCard(
     modifier: Modifier = Modifier,
     tagUiState: WorkTagState,
     onTagStateChange: (WorkTagState) -> Unit,
@@ -91,11 +83,18 @@ fun WorkTagEditBody(
     onButtonClick: () -> Unit,
     buttonLabelResource: Int = R.string.add_work_tag
 ) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        )
+    ) {
     Column(
-        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        //modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
+        modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
     ) {
-        WorkTagEditCard(
+        WorkTagForm(
             tag = tagUiState,
             otherTags = otherTags,
             onTagStateChange = onTagStateChange
@@ -109,12 +108,13 @@ fun WorkTagEditBody(
             Text(stringResource(buttonLabelResource))
         }
     }
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun WorkTagEditPreview() {
-    WorkTagEditCard(
+    WorkTagForm(
         tag = sampleTagUiWithParent(),
         otherTags = sampleTagList(),
         onTagStateChange = {}
@@ -124,7 +124,7 @@ fun WorkTagEditPreview() {
 @Preview(showBackground = true)
 @Composable
 fun WorkTagEditBodyPreview() {
-    WorkTagEditBody(
+    WorkTagFormCard(
         onButtonClick = {},
         onTagStateChange = {},
         tagUiState = sampleTagUiWithoutParent(),

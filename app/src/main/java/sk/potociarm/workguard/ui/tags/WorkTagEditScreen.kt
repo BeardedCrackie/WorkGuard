@@ -32,7 +32,7 @@ import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.navigation.NavDestination
-import sk.potociarm.workguard.ui.tags.component.WorkTagEditBody
+import sk.potociarm.workguard.ui.tags.component.WorkTagFormCard
 import sk.potociarm.workguard.ui.theme.WorkGuardTheme
 
 object WorkTagEditDestination : NavDestination {
@@ -73,7 +73,7 @@ fun WorkTagEditScreen(
             )
         },
     ) { innerPadding ->
-        WorkTagEditBody(
+        WorkTagFormCard(
             tagUiState = viewModel.tagState,
             onTagStateChange = viewModel::updateUiState,
             otherTags = tagListState.tagList,
@@ -113,7 +113,7 @@ fun WorkTagEditScreen(
 @Composable
 fun WorkEditScreenPreview() {
     WorkGuardTheme {
-        WorkTagEditBody(
+        WorkTagFormCard(
             modifier = Modifier,
             tagUiState = sampleTagUiWithoutParent(),
             onTagStateChange = {},
