@@ -153,8 +153,8 @@ private fun WorkEventDateList(
             WorkEventDateHeader(
                 modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_extra_small)),
                 date = date,
-                dateWorkDuration = PrintRunningTime(eventsInDate),
-                dateWorkEarn = PrintDateEarn(eventsInDate)
+                dateWorkDuration = printRunningTime(eventsInDate),
+                dateWorkEarn = printDateEarn(eventsInDate)
             )
 
             // Show the work events if the Column is expanded
@@ -184,7 +184,7 @@ private fun WorkEventDateList(
     }
 }
 
-fun PrintDateEarn(eventsInDate: List<WorkEvent>): String {
+fun printDateEarn(eventsInDate: List<WorkEvent>): String {
     var totalEarn = 0.0
     for (event in eventsInDate) {
         totalEarn += event.toWorkEventState().computeEarn()
@@ -192,7 +192,7 @@ fun PrintDateEarn(eventsInDate: List<WorkEvent>): String {
     return "$totalEarn $RATE_SYMBOL"
 }
 
-fun PrintRunningTime(eventsInDate: List<WorkEvent>): String {
+fun printRunningTime(eventsInDate: List<WorkEvent>): String {
     var totalRunTime = 0
     for (event in eventsInDate) {
         totalRunTime += event.toWorkEventState().getRunTime().toSecondOfDay()
