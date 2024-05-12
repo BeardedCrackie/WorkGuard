@@ -33,7 +33,7 @@ fun AppNavHost(
 ) {
     NavHost(
         //navController = navController, startDestination = HomeScreen.route, modifier = modifier
-        navController = navController, startDestination = WorkTagListDestination.route, modifier = modifier
+        navController = navController, startDestination = WorkEventListDestination.route, modifier = modifier
     ) {
 
         // ----- Home screen -----

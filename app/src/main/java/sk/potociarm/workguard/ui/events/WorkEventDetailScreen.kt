@@ -143,24 +143,20 @@ fun WorkEventDetailCard(
                     textValue = event.name
                 )
                 RowDescUiComponent(
-                    labelResID = R.string.work_event_start_time,
-                    textValue = event.getStartTime()
+                    labelResID = R.string.work_event_start_date,
+                    textValue = event.date.toString()
                 )
                 RowDescUiComponent(
-                    labelResID = R.string.work_event_start_date,
-                    textValue = event.getStartDate()
+                    labelResID = R.string.work_event_start_time,
+                    textValue = event.startTime.toString()
                 )
                 RowDescUiComponent(
                     labelResID = R.string.work_event_end_time,
-                    textValue = event.getEndTime()
-                )
-                RowDescUiComponent(
-                    labelResID = R.string.work_event_end_date,
-                    textValue = event.getEndDate()
+                    textValue = event.endTime.toString()
                 )
                 RowDescUiComponent(
                     labelResID = R.string.work_event_run_time,
-                    textValue = event.getFormattedRunTime()
+                    textValue = event.getRunTime().toString()
                 )
                 RowDescUiComponent(
                     labelResID = R.string.work_event_description,

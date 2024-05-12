@@ -57,7 +57,7 @@ fun WorkEventCard(
                     style = MaterialTheme.typography.headlineMedium
                 )
                 Text(
-                    text = event.getFormattedRunTime(),
+                    text = event.getRunTime().toString(),
                     style = MaterialTheme.typography.headlineSmall
                 )
             }

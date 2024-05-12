@@ -1,6 +1,7 @@
 package sk.potociarm.workguard.data.workevent
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.datetime.LocalDate
 
 /**
  * Repository that provides insert, update, delete, and retrieve of [WorkEvent] from a given data source.
@@ -36,6 +37,6 @@ interface WorkEventsRepository {
 
     //fun getWorkEventsMapByDay(): Map<Timestamp, List<WorkEvent>>
 
-    fun getWorkEventsGroupedByDay(): Flow<Map<String, List<WorkEvent>>>
+    fun getWorkEventsGroupedByDay(): Flow<Map<LocalDate, List<WorkEvent>>>
 
 }

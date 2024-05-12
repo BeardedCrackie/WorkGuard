@@ -2,6 +2,7 @@ package sk.potociarm.workguard.data.workevent
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.LocalDate
 
 class OfflineWorkEventsRepository(private val workEventDao: WorkEventDao) : WorkEventsRepository {
     override fun getAllWorkEvents(): List<WorkEvent> = workEventDao.getAllWorkEvents()
@@ -16,9 +17,9 @@ class OfflineWorkEventsRepository(private val workEventDao: WorkEventDao) : Work
 
     override suspend fun updateWorkEvent(workEvent: WorkEvent) = workEventDao.update(workEvent)
 
-    override fun getWorkEventsGroupedByDay(): Flow<Map<String, List<WorkEvent>>> {
+    override fun getWorkEventsGroupedByDay(): Flow<Map<LocalDate, List<WorkEvent>>> {
         return workEventDao.getAllWorkEventsFlow()
-            .map { it.groupBy { it.startTime.date } }
+            .map { it.groupBy { LocalDate.fromEpochDays(it.date) } }
     }
 
 

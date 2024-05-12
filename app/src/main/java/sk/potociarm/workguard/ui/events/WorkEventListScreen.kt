@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.datetime.LocalDate
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.data.workevent.WorkEvent
@@ -91,7 +92,7 @@ fun WorkEventListScreen(
 
 @Composable
 private fun WorkEventListBody(
-    workEventsMap: Map<String, List<WorkEvent>>,
+    workEventsMap: Map<LocalDate, List<WorkEvent>>,
     onItemClick: (Int) -> Unit,
     contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
 ) {
@@ -120,7 +121,7 @@ private fun WorkEventListBody(
 
 @Composable
 private fun WorkEventDateList(
-    date: String,
+    date: LocalDate,
     eventsInDate: List<WorkEvent>,
     onItemClick: (WorkEvent) -> Unit,
     contentPadding: PaddingValues,
@@ -158,9 +159,9 @@ private fun WorkEventDateList(
 }
 
 @Composable
-fun WorkEventDateHeader(date: String) {
+fun WorkEventDateHeader(date: LocalDate) {
     Text(
-        text = date,
+        text = date.toString(),
         style = MaterialTheme.typography.headlineSmall
     )
 }
@@ -192,7 +193,7 @@ fun WorkEventEmptyListPreview() {
 fun WorkEventDateListPreview() {
     WorkGuardTheme {
         WorkEventDateList(
-            date = "01.01.2024",
+            date = LocalDate(year = 2024, dayOfMonth = 1, monthNumber = 1),
             eventsInDate = sampleEventList(),
             expanded = true,
             onItemClick = {},
