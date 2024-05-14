@@ -9,6 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import kotlinx.coroutines.Job
+import sk.potociarm.workguard.ui.events.WorkEventDetailsDestination
+import sk.potociarm.workguard.ui.events.WorkEventDetailsScreen
+import sk.potociarm.workguard.ui.events.WorkEventEditDestination
+import sk.potociarm.workguard.ui.events.WorkEventEditScreen
 import sk.potociarm.workguard.ui.events.WorkEventEntryDestination
 import sk.potociarm.workguard.ui.events.WorkEventEntryScreen
 import sk.potociarm.workguard.ui.events.WorkEventListDestination
@@ -104,7 +108,7 @@ fun AppNavHost(
         composable(route = WorkEventListDestination.route) {
             WorkEventListScreen(
                 navigateToWorkEventEntry = { navController.navigate(WorkEventEntryDestination.route) },
-                navigateToWorkEventUpdate = { /*TODO*/ },
+                navigateToWorkEventUpdate = { navController.navigate("${WorkEventDetailsDestination.route}/$it") },
                 openNavigation = { openMenu() }
             )
         }
@@ -113,6 +117,39 @@ fun AppNavHost(
         composable(route = WorkEventEntryDestination.route) {
             WorkEventEntryScreen(
                 navigateBack = { navController.popBackStack() },
+                onNavigateUp = { navController.popBackStack() }
+            )
+        }
+
+        // ----- Work Event Detail screen -----
+        composable(
+            route = WorkEventDetailsDestination.routeWithArgs,
+            arguments = listOf(navArgument(WorkEventDetailsDestination.ID_ARG) {
+                type = NavType.IntType
+            })
+        ) {
+            WorkEventDetailsScreen(
+                navigateToWorkTag = {
+                    navController.navigate("${WorkTagDetailsDestination.route}/$it")
+                },
+                navigateBack = {
+                    navController.popBackStack(WorkTagListDestination.route, false)
+                },
+                navigateToEditWorkEvent = {
+                    navController.navigate("${WorkEventEditDestination.route}/$it")
+                }
+            )
+        }
+
+        // ----- Work Event Edit screen -----
+        composable(
+            route = WorkEventEditDestination.routeWithArgs,
+            arguments = listOf(navArgument(WorkEventEditDestination.ID_ARG) {
+                type = NavType.IntType
+            })) {
+            WorkEventEditScreen(
+                navigateBack = { navController.popBackStack() },
+                onDelete = { navController.popBackStack(WorkEventListDestination.route, false) },
                 onNavigateUp = { navController.popBackStack() }
             )
         }

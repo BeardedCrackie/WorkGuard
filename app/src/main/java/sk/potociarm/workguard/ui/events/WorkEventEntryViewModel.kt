@@ -14,11 +14,11 @@ import sk.potociarm.workguard.data.workevent.WorkEventsRepository
 import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 import sk.potociarm.workguard.ui.tags.WorkTagUiList
 
-class WorkEventEntryViewModel(
+open class WorkEventEntryViewModel(
     private val workTagsRepository: WorkTagsRepository,
     private val workEventsRepository: WorkEventsRepository
 ) : ViewModel() {
-    val otherTagsUiState: StateFlow<WorkTagUiList> =
+    open val otherTagsUiState: StateFlow<WorkTagUiList> =
         workTagsRepository.getAllWorkTagsStream().map {
             WorkTagUiList(it)
         }.stateIn(
@@ -33,7 +33,7 @@ class WorkEventEntryViewModel(
     var eventState by mutableStateOf(WorkEventState())
         protected set
 
-    suspend fun saveWorkEvent() {
+    open suspend fun saveWorkEvent() {
         workEventsRepository.insertWorkEvent(eventState.toWorkEvent())
     }
 

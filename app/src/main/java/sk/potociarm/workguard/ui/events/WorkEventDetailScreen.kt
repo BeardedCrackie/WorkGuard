@@ -53,7 +53,7 @@ object WorkEventDetailsDestination : NavDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WorkTagDetailsScreen(
+fun WorkEventDetailsScreen(
     navigateToEditWorkEvent: (Int) -> Unit,
     navigateToWorkTag: (Int) -> Unit,
     navigateBack: () -> Unit,

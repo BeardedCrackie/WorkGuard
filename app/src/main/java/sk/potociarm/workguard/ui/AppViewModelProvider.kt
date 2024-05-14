@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import sk.potociarm.workguard.WorkGuardApplication
 import sk.potociarm.workguard.ui.events.WorkEventDetailsViewModel
+import sk.potociarm.workguard.ui.events.WorkEventEditViewModel
 import sk.potociarm.workguard.ui.events.WorkEventEntryViewModel
 import sk.potociarm.workguard.ui.events.WorkEventListViewModel
 import sk.potociarm.workguard.ui.tags.WorkTagDetailsViewModel
@@ -59,6 +60,13 @@ object AppViewModelProvider {
 
         initializer {
             WorkEventEntryViewModel(
+                workGuardApplication().container.tagRepository,
+                workGuardApplication().container.eventRepository)
+        }
+
+        initializer {
+            WorkEventEditViewModel(
+                this.createSavedStateHandle(),
                 workGuardApplication().container.tagRepository,
                 workGuardApplication().container.eventRepository)
         }
