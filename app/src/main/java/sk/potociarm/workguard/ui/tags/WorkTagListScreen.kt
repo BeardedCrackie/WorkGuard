@@ -41,7 +41,7 @@ import sk.potociarm.workguard.ui.tags.component.WorkTagCard
 
 object WorkTagListDestination : NavDestination {
     override val route = "tag_list"
-    override val titleRes = R.string.app_name
+    override val titleRes = R.string.work_tag_list_screen_title
 }
 
 /**

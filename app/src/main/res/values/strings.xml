@@ -41,4 +41,6 @@
     <string name="work_event_start_date">Start Date</string>
     <string name="work_event_end_date">End Date</string>
     <string name="no_event_description">No event provided</string>
+    <string name="work_events_screen_title">Events</string>
+    <string name="work_tag_list_screen_title">Tags</string>
 </resources>

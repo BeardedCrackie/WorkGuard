@@ -47,7 +47,7 @@ import sk.potociarm.workguard.ui.navigation.NavDestination
 
 object WorkEventListDestination : NavDestination {
     override val route = "event_list"
-    override val titleRes = R.string.app_name
+    override val titleRes = R.string.work_events_screen_title
 }
 
 /**

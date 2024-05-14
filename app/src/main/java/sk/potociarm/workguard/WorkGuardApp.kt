@@ -11,11 +11,12 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -49,7 +51,24 @@ val HOUR_RATE_SYMBOL = "$RATE_SYMBOL/h"
  */
 @Composable
 fun WorkGuardApp(navController: NavHostController = rememberNavController()) {
-    val drawerState = rememberDrawerState(DrawerValue.Open)
+
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    AppNavDrawer(navController, drawerState, function = {
+        AppNavHost(
+            navController = navController,
+            openMenu = { scope.launch { drawerState.open() } }
+        )
+    })
+}
+
+@Composable
+private fun AppNavDrawer(
+    navController: NavHostController,
+    drawerState: DrawerState,
+    function: @Composable () -> Unit
+) {
     val scope = rememberCoroutineScope()
     val selectedScreen = remember { mutableStateOf(navController.currentDestination?.route) }
 
@@ -68,8 +87,9 @@ fun WorkGuardApp(navController: NavHostController = rememberNavController()) {
                     Text(
                         stringResource(id = R.string.app_name),
                         modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.headlineSmall
                     )
-                    HorizontalDivider()
+                    //HorizontalDivider()
 
                     NavigationDrawerItem(
                         //icon = { Icons.Rounded.Edit },
@@ -79,6 +99,7 @@ fun WorkGuardApp(navController: NavHostController = rememberNavController()) {
                         onClick = {
                             selectedScreen.value = WorkTagListDestination.route
                             scope.launch { drawerState.close() }
+                            navController.clearBackStack(WorkTagListDestination.route)
                             navController.navigate(WorkTagListDestination.route)
                         },
                     )
@@ -89,6 +110,7 @@ fun WorkGuardApp(navController: NavHostController = rememberNavController()) {
                         onClick = {
                             selectedScreen.value = WorkEventListDestination.route
                             scope.launch { drawerState.close() }
+                            navController.clearBackStack(WorkEventListDestination.route)
                             navController.navigate(WorkEventListDestination.route)
                         },
                     )
@@ -99,11 +121,8 @@ fun WorkGuardApp(navController: NavHostController = rememberNavController()) {
         drawerState = drawerState,
         gesturesEnabled = true,
         scrimColor = Color.Black.copy(alpha = 0.3f)
-    ) {
-        AppNavHost(
-            navController = navController,
-            openMenu = { scope.launch { drawerState.open() }}
-        )
+    ){
+        function()
     }
 }
 
@@ -140,5 +159,15 @@ fun WorkGuardTopAppBar(
             }
         },
         actions = actions
+    )
+}
+
+@Preview
+@Composable
+private fun AppNavDrawerPreview() {
+    AppNavDrawer(
+        navController = rememberNavController(),
+        drawerState = DrawerState(DrawerValue.Open),
+        function = {}
     )
 }
