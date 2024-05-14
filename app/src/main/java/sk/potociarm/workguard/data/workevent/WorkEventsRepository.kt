@@ -31,6 +31,11 @@ interface WorkEventsRepository {
     suspend fun deleteWorkEvent(workEvent: WorkEvent)
 
     /**
+     * Delete WorkEvent from the data source by id
+     */
+    suspend fun deleteWorkEventById(id: Int)
+
+    /**
      * Update WorkEvent in the data source
      */
     suspend fun updateWorkEvent(workEvent: WorkEvent)

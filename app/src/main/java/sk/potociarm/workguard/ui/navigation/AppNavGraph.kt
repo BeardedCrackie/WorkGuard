@@ -133,7 +133,7 @@ fun AppNavHost(
                     navController.navigate("${WorkTagDetailsDestination.route}/$it")
                 },
                 navigateBack = {
-                    navController.popBackStack(WorkTagListDestination.route, false)
+                    navController.popBackStack(WorkEventListDestination.route, false)
                 },
                 navigateToEditWorkEvent = {
                     navController.navigate("${WorkEventEditDestination.route}/$it")

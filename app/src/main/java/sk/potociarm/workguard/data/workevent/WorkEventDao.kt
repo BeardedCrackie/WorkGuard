@@ -20,6 +20,9 @@ interface WorkEventDao {
     @Delete
     suspend fun delete(workEvent: WorkEvent)
 
+    @Query("DELETE FROM work_event WHERE id = :id")
+    suspend fun deleteById(id: Int)
+
     @Query("SELECT * from work_event WHERE id = :id")
     fun getWorkEvent(id: Int): Flow<WorkEvent>
 

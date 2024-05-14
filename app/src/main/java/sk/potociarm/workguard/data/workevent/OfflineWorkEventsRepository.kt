@@ -15,6 +15,8 @@ class OfflineWorkEventsRepository(private val workEventDao: WorkEventDao) : Work
 
     override suspend fun deleteWorkEvent(workEvent: WorkEvent) = workEventDao.delete(workEvent)
 
+    override suspend fun deleteWorkEventById(id: Int) = workEventDao.deleteById(id)
+
     override suspend fun updateWorkEvent(workEvent: WorkEvent) = workEventDao.update(workEvent)
 
     override fun getWorkEventsGroupedByDay(): Flow<Map<LocalDate, List<WorkEvent>>> {
