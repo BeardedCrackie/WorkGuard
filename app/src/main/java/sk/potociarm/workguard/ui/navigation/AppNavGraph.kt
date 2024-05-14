@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import kotlinx.coroutines.Job
 import sk.potociarm.workguard.ui.events.WorkEventEntryDestination
 import sk.potociarm.workguard.ui.events.WorkEventEntryScreen
 import sk.potociarm.workguard.ui.events.WorkEventListDestination
@@ -30,6 +31,7 @@ import sk.potociarm.workguard.ui.tags.WorkTagListScreen
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
+    openMenu: () -> Job,
 ) {
     NavHost(
         //navController = navController, startDestination = HomeScreen.route, modifier = modifier
@@ -54,7 +56,7 @@ fun AppNavHost(
                 navigateToWorkTagEntry = { navController.navigate(WorkTagEntryDestination.route) },
                 navigateToWorkTagUpdate = { navController.navigate("${WorkTagDetailsDestination.route}/${it}")
                 },
-                navigateBack = { navController.popBackStack() },
+                openNavigation = { openMenu() }
             )
         }
 
@@ -103,7 +105,8 @@ fun AppNavHost(
             WorkEventListScreen(
                 navigateToWorkEventEntry = { navController.navigate(WorkEventEntryDestination.route) },
                 navigateToWorkEventUpdate = { /*TODO*/ },
-                navigateBack = {  navController.popBackStack() })
+                openNavigation = { openMenu() }
+            )
         }
 
         // ----- Work Event Entry screen -----

@@ -58,9 +58,9 @@ object WorkEventListDestination : NavDestination {
 fun WorkEventListScreen(
     navigateToWorkEventEntry: () -> Unit,
     navigateToWorkEventUpdate: (Int) -> Unit,
-    navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: WorkEventListViewModel = viewModel(factory = AppViewModelProvider.Factory)
+    viewModel: WorkEventListViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    openNavigation: () -> Unit
 ) {
     val workEventMap = viewModel.eventMap.collectAsState() //todo load state
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -70,9 +70,9 @@ fun WorkEventListScreen(
         topBar = {
             WorkGuardTopAppBar(
                 title = stringResource(WorkEventListDestination.titleRes),
-                canNavigateBack = true,
+                canNavigateBack = false,
                 scrollBehavior = scrollBehavior,
-                navigateUp = navigateBack,
+                openNavigation = openNavigation
             )
         },
         floatingActionButton = {
