@@ -21,8 +21,13 @@ data class WorkEventState(
     val overridePrice: Boolean = true
 ) {
     private fun getRunTimeInSeconds() : Int {
-        return ((endTime?.toSecondOfDay() ?: (LocalDateTime.now().toLocalTime()
-            .toSecondOfDay() - startTime.toSecondOfDay())))
+        val end = endTime?.toSecondOfDay() ?:
+        LocalDateTime.now().toLocalTime().toSecondOfDay()
+        val start = startTime.toSecondOfDay()
+        if (end > start) {
+            return end - start;
+        }
+        return 86400 - start + end
     }
 
     fun getRunTime() : LocalTime {

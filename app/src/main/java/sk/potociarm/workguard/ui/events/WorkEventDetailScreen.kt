@@ -158,10 +158,6 @@ fun WorkEventDetailCard(
                     labelResID = R.string.work_event_description,
                     textValue = event.description
                 )
-                RowDescUiComponent(
-                    labelResID = R.string.work_event_description,
-                    textValue = event.description
-                )
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.outlineVariant,
                     thickness = 1.dp
