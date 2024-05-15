@@ -47,7 +47,7 @@ open class WorkEventEntryViewModel(
                 .first()
                 .toWorkTagState()
             eventState = eventState.copy(
-                price = tag.price.toDouble()
+                price = tag.price
             )
         }
     }

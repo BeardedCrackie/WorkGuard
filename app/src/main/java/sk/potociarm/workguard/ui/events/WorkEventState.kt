@@ -18,7 +18,7 @@ data class WorkEventState(
     val endTime: LocalTime? = null,
     var name: String = "name",
     val description: String = "desc",
-    val price: Double = 0.0,
+    val price: String = "0.0",
     val overridePrice: Boolean = true
 ) {
     private fun getRunTimeInSeconds() : Int {
@@ -36,7 +36,7 @@ data class WorkEventState(
     }
 
     fun computeEarn() : Double {
-        return (this.price * (getRunTimeInSeconds().toDouble()/3600))
+        return (this.price.toDouble() * (getRunTimeInSeconds().toDouble()/3600))
             .toBigDecimal().setScale(2, RoundingMode.DOWN).toDouble()
     }
 
@@ -53,7 +53,7 @@ fun WorkEventState.toWorkEvent(): WorkEvent = WorkEvent(
     startTime = startTime.toSecondOfDay(),
     endTime = endTime?.toSecondOfDay(),
     description = description,
-    price = price,
+    price = price.toDouble(),
     overridePrice = overridePrice
 )
 
@@ -68,7 +68,7 @@ fun WorkEvent.toWorkEventState(): WorkEventState = WorkEventState(
     startTime = LocalTime.fromSecondOfDay(startTime),
     endTime = endTime?.let { LocalTime.fromSecondOfDay(it) },
     description = description,
-    price = price,
+    price = price.toString(),
     overridePrice = overridePrice
 )
 
@@ -90,7 +90,7 @@ fun sampleRunningEventWithTag(): WorkEventState {
         date = LocalDate(year = 2024, month = Month.JANUARY, dayOfMonth = 1),
         startTime = LocalTime(hour = 10, minute = 10),
         name = "Test name", description = "Test desc",
-        price = 10.5
+        price = "10.5"
     )
 }
 

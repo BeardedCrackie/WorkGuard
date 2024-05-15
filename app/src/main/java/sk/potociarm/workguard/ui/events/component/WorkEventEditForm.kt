@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.WorkGuardTheme
@@ -117,6 +118,9 @@ fun WorkEventForm(
             },
             label = { Text("Title") },
             modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            )
         )
 
         // Description field
@@ -126,7 +130,10 @@ fun WorkEventForm(
                 onEventStateChange(workEvent.copy(description = it))
             },
             label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done
+            )
         )
 
         val openDialog = remember { mutableStateOf(false) }
@@ -291,10 +298,14 @@ fun WorkEventForm(
                 enabled = workEvent.overridePrice,
                 value = workEvent.price.toString(),
                 onValueChange = {
-                    onEventStateChange(workEvent.copy(price = it.toDouble()))
+                    onEventStateChange(workEvent.copy(price = it))
                 },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done
+                    ),
                 label = { Text("Price") },
+                isError = workEvent.price.toDoubleOrNull() == null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(4f)
