@@ -54,6 +54,11 @@ fun WorkEventEntryScreen(
                 }
             },
             onEventStateChange = viewModel::updateUiState,
+            onEventPriceChange = {
+                coroutineScope.launch {
+                    viewModel.setPriceByWorkEvent()
+                }
+            },
             contentPadding = innerPadding,
             allTagsState = tagListState.tagList
         )
@@ -66,10 +71,11 @@ fun WorkEntryScreenPreview() {
     WorkGuardTheme {
         WorkEventFormCard(
             modifier = Modifier,
-            onButtonClick = {},
-            onEventStateChange = {},
             workEventState = sampleEventWithoutTag(),
-            allTagsState = sampleTagList()
+            allTagsState = sampleTagList(),
+            onEventStateChange = {},
+            onButtonClick = {},
+            onEventPriceChange = {}
         )
     }
 }

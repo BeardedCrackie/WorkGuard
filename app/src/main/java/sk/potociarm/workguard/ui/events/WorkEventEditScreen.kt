@@ -71,15 +71,20 @@ fun WorkEventEditScreen(
     ) { innerPadding ->
         WorkEventFormCard(
             workEventState = viewModel.eventState,
+            allTagsState = tagListState.tagList,
+            onEventStateChange = viewModel::updateUiState,
             onButtonClick = {
                 coroutineScope.launch {
                     viewModel.saveWorkEvent()
                     navigateBack()
                 }
             },
-            onEventStateChange = viewModel::updateUiState,
             contentPadding = innerPadding,
-            allTagsState = tagListState.tagList
+            onEventPriceChange = {
+                coroutineScope.launch {
+                    viewModel.setPriceByWorkEvent()
+                }
+            },
         )
         if (deleteConfirmationRequired) {
         DeleteConfirmationDialog(
@@ -104,10 +109,11 @@ fun WorkEventEditScreenPreview() {
     WorkGuardTheme {
         WorkEventFormCard(
             modifier = Modifier,
-            onButtonClick = {},
-            onEventStateChange = {},
             workEventState = sampleEventWithoutTag(),
-            allTagsState = sampleTagList()
+            allTagsState = sampleTagList(),
+            onEventStateChange = {},
+            onButtonClick = {},
+            onEventPriceChange = {}
         )
     }
 }

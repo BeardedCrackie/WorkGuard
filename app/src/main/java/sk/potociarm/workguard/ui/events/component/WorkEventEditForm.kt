@@ -62,6 +62,7 @@ fun WorkEventFormCard(
     onEventStateChange: (WorkEventState) -> Unit,
     onButtonClick: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
+    onEventPriceChange: () -> Unit,
 ) {
     //val workEvent by remember { mutableStateOf(workEventState) }
     Log.v("Event edit", workEventState.toString())
@@ -84,6 +85,7 @@ fun WorkEventFormCard(
                 WorkEventForm(
                     workEvent = workEventState,
                     onEventStateChange = onEventStateChange,
+                    onEventPriceChange = onEventPriceChange,
                     allTag = allTagsState
                 )
                 OutlinedButton(
@@ -104,6 +106,7 @@ fun WorkEventForm(
     workEvent: WorkEventState,
     onEventStateChange: (WorkEventState) -> Unit,
     allTag: List<WorkTag>,
+    onEventPriceChange: () -> Unit,
 ) {
     Column(
     ) {
@@ -210,7 +213,8 @@ fun WorkEventForm(
                     expanded = true },
             ) {
                 OutlinedTextField(
-                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                    modifier = Modifier
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                         .fillMaxWidth(),
                     readOnly = true,
                     //enabled = false,
@@ -270,10 +274,11 @@ fun WorkEventForm(
                     onEventStateChange(
                         workEvent.copy(
                             overridePrice = it,
-                            price = if (it) workEvent.price.toDouble() //todo set workEvent.price = tag price
-                            else workEvent.price
                         )
                     )
+                    if (!it) {
+                        onEventPriceChange()
+                    }
                     Log.v("Event edit", "switch enabled: $it $workEvent")
                 },
                 modifier = Modifier
@@ -351,9 +356,10 @@ fun DatePickerPopup(
 @Composable
 fun WorkEventFormPreview() {
     WorkEventForm(
-        onEventStateChange = {},
         workEvent = sampleEventWithTag(),
-        allTag = sampleTagList()
+        onEventStateChange = {},
+        allTag = sampleTagList(),
+        onEventPriceChange = { }
     )
 }
 
@@ -363,10 +369,11 @@ fun WorkEventFormCardPreview() {
     WorkGuardTheme {
         WorkEventFormCard(
             //modifier = Modifier,
-            onButtonClick = {},
-            onEventStateChange = {},
             workEventState = sampleEventWithTag(),
-            allTagsState = sampleTagList()
+            allTagsState = sampleTagList(),
+            onEventStateChange = {},
+            onButtonClick = {},
+            onEventPriceChange = {}
         )
     }
 }
