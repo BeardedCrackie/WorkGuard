@@ -24,5 +24,7 @@ class OfflineWorkEventsRepository(private val workEventDao: WorkEventDao) : Work
             .map { it.groupBy { LocalDate.fromEpochDays(it.date) } }
     }
 
+    override fun getUsersAndLibraries(id: Int): Flow<WorkEventWithTag> =
+        workEventDao.getUsersAndLibraries(id)
 
 }

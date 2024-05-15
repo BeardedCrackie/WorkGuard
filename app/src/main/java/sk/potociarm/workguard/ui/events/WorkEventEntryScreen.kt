@@ -18,6 +18,7 @@ import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.events.component.WorkEventFormCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
+import sk.potociarm.workguard.ui.tags.sampleTagList
 
 object WorkEventEntryDestination : NavDestination {
     override val route = "workEvent_entry"
@@ -32,7 +33,7 @@ fun WorkEventEntryScreen(
     canNavigateBack: Boolean = true,
     viewModel: WorkEventEntryViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val tagListState by viewModel.otherTagsUiState.collectAsState()
+    val tagListState by viewModel.allTagsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -53,7 +54,8 @@ fun WorkEventEntryScreen(
                 }
             },
             onEventStateChange = viewModel::updateUiState,
-            contentPadding = innerPadding
+            contentPadding = innerPadding,
+            allTagsState = tagListState.tagList
         )
     }
 }
@@ -66,7 +68,8 @@ fun WorkEntryScreenPreview() {
             modifier = Modifier,
             onButtonClick = {},
             onEventStateChange = {},
-            workEventState = sampleEventWithoutTag()
+            workEventState = sampleEventWithoutTag(),
+            allTagsState = sampleTagList()
         )
     }
 }

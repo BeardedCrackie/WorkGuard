@@ -1,20 +1,26 @@
 package sk.potociarm.workguard.ui.events.component
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -26,6 +32,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -35,16 +42,19 @@ import com.example.compose.WorkGuardTheme
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalTime
 import sk.potociarm.workguard.R
+import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.component.OutlinedLabeledButton
 import sk.potociarm.workguard.ui.events.WorkEventState
 import sk.potociarm.workguard.ui.events.sampleEventWithTag
 import sk.potociarm.workguard.ui.tags.component.TimePickerDialog
+import sk.potociarm.workguard.ui.tags.sampleTagList
 
 
 @Composable
 fun WorkEventFormCard(
     modifier: Modifier = Modifier,
     workEventState: WorkEventState,
+    allTagsState: List<WorkTag>,
     onEventStateChange: (WorkEventState) -> Unit,
     onButtonClick: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
@@ -61,7 +71,6 @@ fun WorkEventFormCard(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer
             ),
-            onClick = {}
         ) {
             Column(
                 modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
@@ -70,7 +79,8 @@ fun WorkEventFormCard(
                 // Title field
                 WorkEventForm(
                     workEvent = workEventState,
-                    onEventStateChange = onEventStateChange
+                    onEventStateChange = onEventStateChange,
+                    allTag = allTagsState
                 )
                 OutlinedButton(
                     onClick = { onButtonClick() },
@@ -84,12 +94,12 @@ fun WorkEventFormCard(
     }
 }
 
-@SuppressLint("UnrememberedMutableInteractionSource")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkEventForm(
     workEvent: WorkEventState,
-    onEventStateChange: (WorkEventState) -> Unit
+    onEventStateChange: (WorkEventState) -> Unit,
+    allTag: List<WorkTag>,
 ) {
     Column(
     ) {
@@ -115,14 +125,6 @@ fun WorkEventForm(
         val openDialog = remember { mutableStateOf(false) }
         DatePickerPopup(onEventStateChange, workEvent, openDialog)
 
-        // Date field
-        OutlinedLabeledButton(
-            label = { Text(stringResource(R.string.work_event_start_date)) },
-            value = workEvent.date.toString(),
-            onButtonClick = {
-                openDialog.value = true
-            },
-        )
 
         var showStartTimePicker by remember { mutableStateOf(false) }
 
@@ -140,15 +142,6 @@ fun WorkEventForm(
                 },
             ) { TimePicker(state = state) }
         }
-
-        // Start time field
-        OutlinedLabeledButton(
-            label = { Text(stringResource(R.string.work_event_start_time)) },
-            value = workEvent.startTime.toString(),
-            onButtonClick = {
-                showStartTimePicker = true
-            },
-        )
 
         var showEndTimePicker by remember { mutableStateOf(false) }
 
@@ -169,15 +162,101 @@ fun WorkEventForm(
             }
         }
 
-        // End time field
         OutlinedLabeledButton(
-            label = { Text(stringResource(R.string.work_event_end_time)) },
-            value = workEvent.endTime.toString(),
+            label = { Text(stringResource(R.string.work_event_start_date)) },
+            value = workEvent.date.toString(),
             onButtonClick = {
-                showEndTimePicker = true
+                openDialog.value = true
             },
+            //modifier = Modifier.weight(1f)
         )
-    }
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // Start time field
+            OutlinedLabeledButton(
+                label = { Text(stringResource(R.string.work_event_start_time)) },
+                value = workEvent.startTime.toString(),
+                onButtonClick = {
+                    showStartTimePicker = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+            Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.padding_small)))
+            // End time field
+            OutlinedLabeledButton(
+                label = { Text(stringResource(R.string.work_event_end_time)) },
+                value = workEvent.endTime.toString(),
+                onButtonClick = {
+                    showEndTimePicker = true
+                },
+                modifier = Modifier.weight(1f)
+            )
+        }
+
+
+        /* ---------------------------- */
+        var expanded by rememberSaveable { mutableStateOf(false) }
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = {
+                    Log.v("Event action", "Event clicked $expanded")
+                    expanded = true },
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable)
+                        .fillMaxWidth(),
+                    readOnly = true,
+                    //enabled = false,
+                    label = { Text(stringResource(id = R.string.tag_parent)) },
+                    //textStyle = MaterialTheme.typography.headlineSmall,
+                    onValueChange = {},
+                    value = allTag.find { it.id == workEvent.tagId }?.name
+                        ?: stringResource(id = R.string.no_tag_parent),
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                )
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false },
+                ) {
+                    DropdownMenuItem(
+                        //text = { Text(workTag.name) },
+                        text = {
+                            Text(stringResource(id = R.string.no_tag_parent))
+                        },
+                        onClick = {
+                            onEventStateChange(
+                                workEvent.copy(tagId = null)
+                            )
+                            expanded = false
+                        },
+                        contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                    )
+                    allTag.forEach { currentTag ->
+                        DropdownMenuItem(
+                            //text = { Text(workTag.name) },
+                            text = {
+                                Text(currentTag.name)
+                            },
+                            onClick = {
+                                onEventStateChange(
+                                    workEvent.copy(
+                                        tagId = currentTag.id
+                                    )
+                                )
+                                expanded = false
+                            },
+                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
+                        )
+                    }
+                }
+
+            }
+        }
+        /* ----------------------------- */
+
 }
 
 @Composable
@@ -232,7 +311,8 @@ fun DatePickerPopup(
 fun WorkEventFormPreview() {
     WorkEventForm(
         onEventStateChange = {},
-        workEvent = sampleEventWithTag()
+        workEvent = sampleEventWithTag(),
+        allTag = sampleTagList()
     )
 }
 
@@ -244,7 +324,8 @@ fun WorkEventFormCardPreview() {
             //modifier = Modifier,
             onButtonClick = {},
             onEventStateChange = {},
-            workEventState = sampleEventWithTag()
+            workEventState = sampleEventWithTag(),
+            allTagsState = sampleTagList()
         )
     }
 }

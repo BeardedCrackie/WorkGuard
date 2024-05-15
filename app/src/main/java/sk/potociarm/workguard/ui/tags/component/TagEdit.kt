@@ -70,7 +70,7 @@ fun WorkTagForm(
                 isError = tag.price.toDoubleOrNull() == null,
                 label = { Text(stringResource(id = R.string.tag_price)) }
             )
-            ParentDropdownMenu(tag = tag, onTagStateChange = onTagStateChange,allTag = otherTags, modifier = modifier.fillMaxWidth())
+            TagDropdownMenu(tag = tag, onTagStateChange = onTagStateChange,allTag = otherTags, modifier = modifier.fillMaxWidth())
         }
 }
 

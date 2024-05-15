@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.dimensionResource
@@ -58,10 +59,9 @@ fun WorkEventDetailsScreen(
     navigateBack: () -> Unit,
     viewModel: WorkEventDetailsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val eventState = viewModel.eventUiState.collectAsState()
-    val eventTagState = viewModel.tagUiState?.collectAsState()
+    val eventDetailState by viewModel.eventWithTagState.collectAsState()
 
-    Log.v("Event detail", eventState.toString())
+    Log.v("Event detail", eventDetailState.event.toString())
 
     Scaffold(
         topBar = {
@@ -73,7 +73,7 @@ fun WorkEventDetailsScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navigateToEditWorkEvent(eventState.value.id) },
+                onClick = { navigateToEditWorkEvent(eventDetailState.event.id) },
                 shape = MaterialTheme.shapes.medium,
                 modifier = Modifier
                     .padding(
@@ -89,8 +89,8 @@ fun WorkEventDetailsScreen(
         },
     ) { innerPadding ->
         WorkEventDetailsBody(
-            event = eventState.value,
-            eventTag = eventTagState?.value,
+            event = eventDetailState.event,
+            eventTag = eventDetailState.tag,
             navigateToWorkTag = navigateToWorkTag,
             contentPadding = innerPadding,
         )
@@ -162,9 +162,11 @@ fun WorkEventDetailCard(
                     color = MaterialTheme.colorScheme.outlineVariant,
                     thickness = 1.dp
                 )
-                if (event.tagId != null) {
+                if (event.tagId != null && eventTag != null) { //todo tag loading screen maybe
+                    Log.v("Event detail","event: ${event}")
+                    Log.v("Event detail","event tag: ${eventTag}")
                     WorkTagCard(
-                        tag = eventTag!!, //if parentId is null, then parent does not exists
+                        tag = eventTag, //if parentId is null, then parent does not exists
                         parentTag = null,
                         modifier = Modifier.clickable {
                             navigateToWorkTag(eventTag.id)

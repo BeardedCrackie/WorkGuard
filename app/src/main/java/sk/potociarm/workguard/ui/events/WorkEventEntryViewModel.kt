@@ -18,7 +18,7 @@ open class WorkEventEntryViewModel(
     private val workTagsRepository: WorkTagsRepository,
     private val workEventsRepository: WorkEventsRepository
 ) : ViewModel() {
-    open val otherTagsUiState: StateFlow<WorkTagUiList> =
+    open val allTagsUiState: StateFlow<WorkTagUiList> =
         workTagsRepository.getAllWorkTagsStream().map {
             WorkTagUiList(it)
         }.stateIn(

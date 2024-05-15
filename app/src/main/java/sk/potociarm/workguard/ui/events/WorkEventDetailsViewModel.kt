@@ -10,40 +10,36 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import sk.potociarm.workguard.TIMEOUT_MILLIS
 import sk.potociarm.workguard.data.workevent.WorkEventsRepository
-import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.toWorkTagUi
 
 class WorkEventDetailsViewModel(
     savedStateHandle: SavedStateHandle,
-    workTagRepository: WorkTagsRepository,
     workEventsRepository: WorkEventsRepository
 ) : ViewModel() {
     private val itemId: Int = checkNotNull(savedStateHandle[WorkEventDetailsDestination.ID_ARG])
 
-    val eventUiState: StateFlow<WorkEventState> =
-        workEventsRepository.getWorkEventStream(itemId)
+    val eventWithTagState: StateFlow<WorkEventDetailUiState> =
+        workEventsRepository.getUsersAndLibraries(itemId)
             .filterNotNull()
             .map {
-                it.toWorkEventState()
+                WorkEventDetailUiState(
+                    tag = it.tag.toWorkTagUi(),
+                    event = it.event.toWorkEventState()
+                )
             }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                initialValue = WorkEventState()
+                initialValue = WorkEventDetailUiState()
             )
 
-    val tagUiState: StateFlow<WorkTagState>? =
-        eventUiState.value.tagId?.let {
-            workTagRepository.getWorkTagStream(it)
-                .filterNotNull()
-                .map {
-                    it.toWorkTagUi()
-                }
-                .stateIn(
-                    scope = viewModelScope,
-                    started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-                    initialValue = WorkTagState()
-                )
-        }
+    /**
+     * UI state for WorkEventWithTagState
+     */
+    data class WorkEventDetailUiState(
+        val tag: WorkTagState = WorkTagState(),
+        val event: WorkEventState = WorkEventState()
+    )
+
 }

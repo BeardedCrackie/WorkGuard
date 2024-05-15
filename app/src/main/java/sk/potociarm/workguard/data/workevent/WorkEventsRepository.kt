@@ -44,4 +44,6 @@ interface WorkEventsRepository {
 
     fun getWorkEventsGroupedByDay(): Flow<Map<LocalDate, List<WorkEvent>>>
 
+    fun getUsersAndLibraries(id: Int): Flow<WorkEventWithTag>
+
 }

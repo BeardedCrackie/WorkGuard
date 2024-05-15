@@ -1,9 +1,11 @@
 package sk.potociarm.workguard.data.workevent
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import androidx.room.Relation
 import sk.potociarm.workguard.data.worktag.WorkTag
 
 @Entity(tableName = "work_event",
@@ -24,4 +26,12 @@ data class WorkEvent (
     val description: String,
     @ColumnInfo(defaultValue = "0.0") val price: Double,
     @ColumnInfo(defaultValue = false.toString()) val overridePrice: Boolean
+)
+
+data class WorkEventWithTag (
+    @Embedded val event: WorkEvent,
+    @Relation(
+        parentColumn = "tag",
+        entityColumn = "id")
+    val tag: WorkTag,
 )

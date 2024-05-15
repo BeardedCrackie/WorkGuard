@@ -27,6 +27,7 @@ import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.component.DeleteConfirmationDialog
 import sk.potociarm.workguard.ui.events.component.WorkEventFormCard
 import sk.potociarm.workguard.ui.navigation.NavDestination
+import sk.potociarm.workguard.ui.tags.sampleTagList
 
 object WorkEventEditDestination : NavDestination {
     override val route = "work_event_edits"
@@ -44,7 +45,7 @@ fun WorkEventEditScreen(
     canNavigateBack: Boolean = true,
     viewModel: WorkEventEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val tagListState by viewModel.otherTagsUiState.collectAsState()
+    val tagListState by viewModel.allTagsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     var deleteConfirmationRequired by rememberSaveable { mutableStateOf(false) }
 
@@ -77,7 +78,8 @@ fun WorkEventEditScreen(
                 }
             },
             onEventStateChange = viewModel::updateUiState,
-            contentPadding = innerPadding
+            contentPadding = innerPadding,
+            allTagsState = tagListState.tagList
         )
         if (deleteConfirmationRequired) {
         DeleteConfirmationDialog(
@@ -104,7 +106,8 @@ fun WorkEventEditScreenPreview() {
             modifier = Modifier,
             onButtonClick = {},
             onEventStateChange = {},
-            workEventState = sampleEventWithoutTag()
+            workEventState = sampleEventWithoutTag(),
+            allTagsState = sampleTagList()
         )
     }
 }

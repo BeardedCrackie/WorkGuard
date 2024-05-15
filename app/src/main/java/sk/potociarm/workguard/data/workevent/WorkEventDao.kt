@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -30,6 +31,10 @@ interface WorkEventDao {
     fun getAllWorkEvents(): List<WorkEvent>
     @Query("SELECT * from work_event")
     fun getAllWorkEventsFlow(): Flow<List<WorkEvent>>
+
+    @Transaction
+    @Query("SELECT * from work_event WHERE id = :id")
+    fun getUsersAndLibraries(id: Int): Flow<WorkEventWithTag>
 
     /*
     @Query("SELECT * from work_event GROUP BY start_date")
