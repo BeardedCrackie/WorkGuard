@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -23,6 +24,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TimePicker
 import androidx.compose.material3.rememberDatePickerState
@@ -34,9 +36,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.WorkGuardTheme
 import kotlinx.datetime.LocalDate
@@ -253,8 +257,45 @@ fun WorkEventForm(
                     }
                 }
 
-            }
         }
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // Description field
+            Switch(
+                enabled = workEvent.tagId != null,
+                checked = workEvent.overridePrice,
+                onCheckedChange = {
+                    onEventStateChange(
+                        workEvent.copy(
+                            overridePrice = it,
+                            price = if (it) workEvent.price.toDouble() //todo set workEvent.price = tag price
+                            else workEvent.price
+                        )
+                    )
+                    Log.v("Event edit", "switch enabled: $it $workEvent")
+                },
+                modifier = Modifier
+                    .weight(1f)
+                    .align(Alignment.CenterVertically)
+            )
+
+            // Price field
+            OutlinedTextField(
+                enabled = workEvent.overridePrice,
+                value = workEvent.price.toString(),
+                onValueChange = {
+                    onEventStateChange(workEvent.copy(price = it.toDouble()))
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                label = { Text("Price") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(4f)
+            )
+        }
+    }
         /* ----------------------------- */
 
 }
