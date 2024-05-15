@@ -33,7 +33,7 @@ class WorkTagEditViewModel(
             tagState = workTagsRepository.getWorkTagStream(itemId)
                 .filterNotNull()
                 .first()
-                .toWorkTagUi()
+                .toWorkTagState()
         }
     }
 

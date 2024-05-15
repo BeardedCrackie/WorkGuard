@@ -18,7 +18,7 @@ class WorkTagDetailsViewModel(savedStateHandle: SavedStateHandle,workTagReposito
         workTagRepository.getWorkTagStream(itemId)
             .filterNotNull()
             .map {
-                it.toWorkTagUi()
+                it.toWorkTagState()
             }
             .stateIn(
                 scope = viewModelScope,
@@ -30,7 +30,7 @@ class WorkTagDetailsViewModel(savedStateHandle: SavedStateHandle,workTagReposito
         workTagRepository.getWorkTagParentStream(itemId)
             .filterNotNull()
             .map {
-                it.toWorkTagUi()
+                it.toWorkTagState()
             }
             .stateIn(
                 scope = viewModelScope,
