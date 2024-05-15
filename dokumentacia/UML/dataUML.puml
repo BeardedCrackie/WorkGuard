@@ -1,0 +1,132 @@
+@startuml
+interface sk.potociarm.workguard.data.worktag.WorkTagsRepository {
++ Flow<List<WorkTag>> getAllWorkTagsStream()
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<WorkTag?> getWorkTagStream(Int)
++ Flow<List<WorkTag>> getOtherWorkTagsStream(Int)
++ Flow<WorkTag?> getWorkTagParentStream(Int)
++ void insertWorkTag(WorkTag)
++ void deleteWorkTag(WorkTag)
++ void deleteById(Int)
++ void updateWorkTag(WorkTag)
+}
+
+class sk.potociarm.workguard.data.workevent.null {
+}
+class sk.potociarm.workguard.data.workevent.WorkEvent {
+}
+class sk.potociarm.workguard.data.workevent.WorkEventWithTag {
+}
+interface sk.potociarm.workguard.data.workevent.WorkEventDao {
++ void insert(WorkEvent)
++ void update(WorkEvent)
++ void delete(WorkEvent)
++ void deleteById(Int)
++ Flow<WorkEvent?> getWorkEvent(Int)
++ List<WorkEvent> getAllWorkEvents()
++ Flow<List<WorkEvent>> getAllWorkEventsFlow()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+class sk.potociarm.workguard.data.workevent.OfflineWorkEventsRepository {
++ List<WorkEvent> getAllWorkEvents()
++ Flow<List<WorkEvent>> getAllWorkEventsStream()
++ Flow<WorkEvent?> getWorkEventStream(Int)
++ void insertWorkEvent(WorkEvent)
++ void deleteWorkEvent(WorkEvent)
++ void deleteWorkEventById(Int)
++ void updateWorkEvent(WorkEvent)
++ Flow<Map<LocalDate, List<WorkEvent>>> getWorkEventsGroupedByDay()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+class sk.potociarm.workguard.data.worktag.null {
+}
+class sk.potociarm.workguard.data.worktag.WorkTag {
+}
+class sk.potociarm.workguard.data.worktag.OfflineWorkTagsRepository {
++ Flow<List<WorkTag>> getAllWorkTagsStream()
++ Flow<List<WorkTag>> getOtherWorkTagsStream(Int)
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<WorkTag?> getWorkTagParentStream(Int)
++ Flow<WorkTag?> getWorkTagStream(Int)
++ void insertWorkTag(WorkTag)
++ void deleteWorkTag(WorkTag)
++ void deleteById(Int)
++ void updateWorkTag(WorkTag)
+}
+
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration {
+}
+class sk.potociarm.workguard.data.WorkGuardDatabase$Companion {
+- WorkGuardDatabase? Instance
++ WorkGuardDatabase getDatabase(Context)
+}
+
+
+class sk.potociarm.workguard.data.WorkGuardDatabase$Converters {
++ LocalDate fromLocalDate(Int)
++ Int localDateToInt(LocalDate)
++ LocalTime? fromLocalTime(Int?)
++ Int? localTimeToInt(LocalTime?)
+}
+
+abstract class sk.potociarm.workguard.data.WorkGuardDatabase {
++ WorkEventDao workEventDao()
++ WorkTagDao workTagDao()
+}
+
+interface sk.potociarm.workguard.data.workevent.WorkEventsRepository {
++ Flow<List<WorkEvent>> getAllWorkEventsStream()
++ List<WorkEvent> getAllWorkEvents()
++ Flow<WorkEvent?> getWorkEventStream(Int)
++ void insertWorkEvent(WorkEvent)
++ void deleteWorkEvent(WorkEvent)
++ void deleteWorkEventById(Int)
++ void updateWorkEvent(WorkEvent)
++ Flow<Map<LocalDate, List<WorkEvent>>> getWorkEventsGroupedByDay()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+interface sk.potociarm.workguard.data.worktag.WorkTagDao {
++ void insert(WorkTag)
++ void update(WorkTag)
++ void delete(WorkTag)
++ void deleteById(Int)
++ Flow<WorkTag?> getWorkTag(Int)
++ Flow<WorkTag> getWorkTagParent(Int)
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<List<WorkTag>> getAllWorkTags()
++ Flow<List<WorkTag>> getOtherWorkTags(Int)
+}
+
+interface sk.potociarm.workguard.data.AppContainer {
++ WorkTagsRepository tagRepository
++ WorkEventsRepository eventRepository
+}
+
+class sk.potociarm.workguard.data.AppDataContainer {
++ WorkTagsRepository tagRepository
++ WorkEventsRepository eventRepository
+}
+
+
+
+sk.potociarm.workguard.data.workevent.WorkEventsRepository <|.. sk.potociarm.workguard.data.workevent.OfflineWorkEventsRepository
+sk.potociarm.workguard.data.worktag.WorkTagsRepository <|.. sk.potociarm.workguard.data.worktag.OfflineWorkTagsRepository
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration
+sk.potociarm.workguard.data.AutoMigrationSpec <|.. sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$Companion
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$Converters
+androidx.room.RoomDatabase <|-- sk.potociarm.workguard.data.WorkGuardDatabase
+sk.potociarm.workguard.data.AppContainer <|.. sk.potociarm.workguard.data.AppDataContainer
+@enduml

@@ -1,0 +1,267 @@
+@startuml
+interface sk.potociarm.workguard.data.workevent.WorkEventDao {
++ void insert(WorkEvent)
++ void update(WorkEvent)
++ void delete(WorkEvent)
++ void deleteById(Int)
++ Flow<WorkEvent?> getWorkEvent(Int)
++ List<WorkEvent> getAllWorkEvents()
++ Flow<List<WorkEvent>> getAllWorkEventsFlow()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+class sk.potociarm.workguard.WorkGuardApplication {
++ AppContainer container
++ void onCreate()
+}
+
+
+class sk.potociarm.workguard.ui.events.WorkEventDetailsViewModel {
+}
+class sk.potociarm.workguard.ui.events.WorkEventDetailUiState {
+}
+class sk.potociarm.workguard.ui.events.WorkEventEditDestination {
++  route
++  titleRes
++  ID_ARG
++  routeWithArgs
+}
+
+interface sk.potociarm.workguard.data.workevent.WorkEventsRepository {
++ Flow<List<WorkEvent>> getAllWorkEventsStream()
++ List<WorkEvent> getAllWorkEvents()
++ Flow<WorkEvent?> getWorkEventStream(Int)
++ void insertWorkEvent(WorkEvent)
++ void deleteWorkEvent(WorkEvent)
++ void deleteWorkEventById(Int)
++ void updateWorkEvent(WorkEvent)
++ Flow<Map<LocalDate, List<WorkEvent>>> getWorkEventsGroupedByDay()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+class sk.potociarm.workguard.ui.events.WorkEventEntryViewModel {
+}
+interface sk.potociarm.workguard.data.AppContainer {
++ WorkTagsRepository tagRepository
++ WorkEventsRepository eventRepository
+}
+
+class sk.potociarm.workguard.data.AppDataContainer {
++ WorkTagsRepository tagRepository
++ WorkEventsRepository eventRepository
+}
+
+class sk.potociarm.workguard.ui.tags.WorkTagEntryViewModel {
++ StateFlow<WorkTagUiList> otherTagsUiState
++  tagState
++ void null()
++ void saveWorkTag()
++ void updateUiState(WorkTagState)
+}
+
+
+class sk.potociarm.workguard.ui.tags.WorkTagDetailsViewModel {
+- Int itemId
++ StateFlow<WorkTagState> uiState
++ StateFlow<WorkTagState> uiParentState
++ void null()
++ void null()
+}
+
+
+class sk.potociarm.workguard.ui.events.WorkEventListViewModel {
+}
+class sk.potociarm.workguard.ui.tags.WorkTagListViewModel {
++ StateFlow<WorkTagUiList> tagListUiState
++ void null()
+}
+
+
+class sk.potociarm.workguard.ui.home.HomeScreen {
++  route
++  titleRes
+}
+
+interface sk.potociarm.workguard.ui.navigation.NavDestination {
++ String route
++ Int titleRes
+}
+
+class sk.potociarm.workguard.ui.tags.WorkTagListDestination {
++  route
++  titleRes
+}
+
+class sk.potociarm.workguard.ui.events.WorkEventEntryDestination {
++  route
++  titleRes
+}
+
+class sk.potociarm.workguard.MainActivity {
++ void onCreate(Bundle?)
+}
+
+class sk.potociarm.workguard.data.workevent.null {
+}
+class sk.potociarm.workguard.data.workevent.WorkEvent {
+}
+class sk.potociarm.workguard.data.workevent.WorkEventWithTag {
+}
+class sk.potociarm.workguard.data.worktag.OfflineWorkTagsRepository {
++ Flow<List<WorkTag>> getAllWorkTagsStream()
++ Flow<List<WorkTag>> getOtherWorkTagsStream(Int)
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<WorkTag?> getWorkTagParentStream(Int)
++ Flow<WorkTag?> getWorkTagStream(Int)
++ void insertWorkTag(WorkTag)
++ void deleteWorkTag(WorkTag)
++ void deleteById(Int)
++ void updateWorkTag(WorkTag)
+}
+
+class sk.potociarm.workguard.ui.tags.WorkTagEditDestination {
++  route
++  titleRes
++  ID_ARG
++  routeWithArgs
+}
+
+class sk.potociarm.workguard.ui.tags.WorkTagUiList {
+}
+class sk.potociarm.workguard.ui.events.WorkEventListDestination {
++  route
++  titleRes
+}
+
+class com.example.compose.ColorFamily {
+}
+class sk.potociarm.workguard.ui.AppViewModelProvider {
++  Factory
+}
+
+class sk.potociarm.workguard.ui.events.WorkEventState {
+}
+class sk.potociarm.workguard.ui.events.WorkEventListState {
+}
+class sk.potociarm.workguard.ui.events.WorkEventStateMap {
+}
+class sk.potociarm.workguard.ui.tags.WorkTagEntryDestination {
++  route
++  titleRes
+}
+
+interface sk.potociarm.workguard.data.worktag.WorkTagsRepository {
++ Flow<List<WorkTag>> getAllWorkTagsStream()
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<WorkTag?> getWorkTagStream(Int)
++ Flow<List<WorkTag>> getOtherWorkTagsStream(Int)
++ Flow<WorkTag?> getWorkTagParentStream(Int)
++ void insertWorkTag(WorkTag)
++ void deleteWorkTag(WorkTag)
++ void deleteById(Int)
++ void updateWorkTag(WorkTag)
+}
+
+class sk.potociarm.workguard.ui.tags.WorkTagEditViewModel {
+}
+class sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination {
++  route
++  titleRes
++  ID_ARG
++  routeWithArgs
+}
+
+class sk.potociarm.workguard.data.workevent.OfflineWorkEventsRepository {
++ List<WorkEvent> getAllWorkEvents()
++ Flow<List<WorkEvent>> getAllWorkEventsStream()
++ Flow<WorkEvent?> getWorkEventStream(Int)
++ void insertWorkEvent(WorkEvent)
++ void deleteWorkEvent(WorkEvent)
++ void deleteWorkEventById(Int)
++ void updateWorkEvent(WorkEvent)
++ Flow<Map<LocalDate, List<WorkEvent>>> getWorkEventsGroupedByDay()
++ Flow<WorkEventWithTag> getWorkEventsWithTag(Int)
++ void releaseTagFromEvents(Int)
+}
+
+interface sk.potociarm.workguard.data.worktag.WorkTagDao {
++ void insert(WorkTag)
++ void update(WorkTag)
++ void delete(WorkTag)
++ void deleteById(Int)
++ Flow<WorkTag?> getWorkTag(Int)
++ Flow<WorkTag> getWorkTagParent(Int)
++ Flow<List<WorkTag>> getWorkTagChild(Int)
++ Flow<List<WorkTag>> getAllWorkTags()
++ Flow<List<WorkTag>> getOtherWorkTags(Int)
+}
+
+class sk.potociarm.workguard.ui.events.WorkEventEditViewModel {
+}
+class sk.potociarm.workguard.ui.tags.WorkTagState {
+}
+class sk.potociarm.workguard.data.worktag.null {
+}
+class sk.potociarm.workguard.data.worktag.WorkTag {
+}
+class sk.potociarm.workguard.ui.events.WorkEventDetailsDestination {
++  route
++  titleRes
++  ID_ARG
++  routeWithArgs
+}
+
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.null {
+}
+class sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration {
+}
+class sk.potociarm.workguard.data.WorkGuardDatabase$Companion {
+- WorkGuardDatabase? Instance
++ WorkGuardDatabase getDatabase(Context)
+}
+
+
+class sk.potociarm.workguard.data.WorkGuardDatabase$Converters {
++ LocalDate fromLocalDate(Int)
++ Int localDateToInt(LocalDate)
++ LocalTime? fromLocalTime(Int?)
++ Int? localTimeToInt(LocalTime?)
+}
+
+abstract class sk.potociarm.workguard.data.WorkGuardDatabase {
++ WorkEventDao workEventDao()
++ WorkTagDao workTagDao()
+}
+
+
+
+android.app.Application <|-- sk.potociarm.workguard.WorkGuardApplication
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.events.WorkEventEditDestination
+sk.potociarm.workguard.data.AppContainer <|.. sk.potociarm.workguard.data.AppDataContainer
+androidx.lifecycle.ViewModel <|-- sk.potociarm.workguard.ui.tags.WorkTagEntryViewModel
+androidx.lifecycle.ViewModel <|-- sk.potociarm.workguard.ui.tags.WorkTagDetailsViewModel
+androidx.lifecycle.ViewModel <|-- sk.potociarm.workguard.ui.events.WorkEventListViewModel
+androidx.lifecycle.ViewModel <|-- sk.potociarm.workguard.ui.tags.WorkTagListViewModel
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.home.HomeScreen
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.tags.WorkTagListDestination
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.events.WorkEventEntryDestination
+androidx.activity.ComponentActivity <|-- sk.potociarm.workguard.MainActivity
+sk.potociarm.workguard.data.worktag.WorkTagsRepository <|.. sk.potociarm.workguard.data.worktag.OfflineWorkTagsRepository
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.tags.WorkTagEditDestination
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.events.WorkEventListDestination
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.tags.WorkTagEntryDestination
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination
+sk.potociarm.workguard.data.workevent.WorkEventsRepository <|.. sk.potociarm.workguard.data.workevent.OfflineWorkEventsRepository
+sk.potociarm.workguard.ui.navigation.NavDestination <|.. sk.potociarm.workguard.ui.events.WorkEventDetailsDestination
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration
+sk.potociarm.workguard.data.AutoMigrationSpec <|.. sk.potociarm.workguard.data.WorkGuardDatabase$MyAutoMigration
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$Companion
+sk.potociarm.workguard.data.WorkGuardDatabase +.. sk.potociarm.workguard.data.WorkGuardDatabase$Converters
+androidx.room.RoomDatabase <|-- sk.potociarm.workguard.data.WorkGuardDatabase
+@enduml
