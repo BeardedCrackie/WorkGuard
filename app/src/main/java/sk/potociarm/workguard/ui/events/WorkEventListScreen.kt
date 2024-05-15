@@ -115,7 +115,9 @@ private fun WorkEventListBody(
                 text = stringResource(R.string.no_event_description),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(contentPadding),
+                modifier = Modifier.padding(contentPadding)
+                    .align(Alignment.CenterHorizontally)
+                    .fillMaxWidth(),
             )
         } else {
             for(eventList in workEventsMap) {
