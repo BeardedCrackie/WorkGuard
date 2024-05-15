@@ -43,4 +43,7 @@
     <string name="work_events_screen_title">Events</string>
     <string name="work_tag_list_screen_title">Tags</string>
     <string name="work_event_entry_title">Create event</string>
+    <string name="work_event_price">price</string>
+    <string name="work_event_earn">Earn</string>
+    <string name="work_event_price_overrided">Price overrided</string>
 </resources>

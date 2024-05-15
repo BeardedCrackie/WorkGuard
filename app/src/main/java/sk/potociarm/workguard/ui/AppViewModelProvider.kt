@@ -47,7 +47,6 @@ object AppViewModelProvider {
         initializer {
             WorkEventDetailsViewModel(
                 this.createSavedStateHandle(),
-                workGuardApplication().container.tagRepository,
                 workGuardApplication().container.eventRepository
             )
         }
