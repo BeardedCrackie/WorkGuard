@@ -46,4 +46,6 @@ interface WorkEventsRepository {
 
     fun getWorkEventsWithTag(id: Int): Flow<WorkEventWithTag>
 
+    suspend fun releaseTagFromEvents(tagId: Int)
+
 }

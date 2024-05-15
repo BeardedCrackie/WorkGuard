@@ -32,7 +32,8 @@ object AppViewModelProvider {
         initializer {
             WorkTagEditViewModel(
                 this.createSavedStateHandle(),
-                workGuardApplication().container.tagRepository
+                workGuardApplication().container.tagRepository,
+                workGuardApplication().container.eventRepository
             )
         }
         initializer {

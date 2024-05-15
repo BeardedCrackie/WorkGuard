@@ -36,9 +36,6 @@ interface WorkEventDao {
     @Query("SELECT * from work_event WHERE id = :id")
     fun getWorkEventsWithTag(id: Int): Flow<WorkEventWithTag>
 
-    /*
-    @Query("SELECT * from work_event GROUP BY start_date")
-    fun getWorkEventsMapByDay(): Map<String, List<WorkEvent>>
-
-     */
+    @Query("UPDATE work_event set tag = null, overridePrice = 1 where tag = :tagId")
+    fun releaseTagFromEvents(tagId: Int)
 }

@@ -27,4 +27,6 @@ class OfflineWorkEventsRepository(private val workEventDao: WorkEventDao) : Work
     override fun getWorkEventsWithTag(id: Int): Flow<WorkEventWithTag> =
         workEventDao.getWorkEventsWithTag(id)
 
+    override suspend fun releaseTagFromEvents(tagId: Int) = workEventDao.releaseTagFromEvents(tagId)
+
 }

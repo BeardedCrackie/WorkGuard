@@ -11,7 +11,10 @@ import kotlinx.coroutines.flow.stateIn
 import sk.potociarm.workguard.TIMEOUT_MILLIS
 import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 
-class WorkTagDetailsViewModel(savedStateHandle: SavedStateHandle,workTagRepository: WorkTagsRepository) : ViewModel() {
+class WorkTagDetailsViewModel(
+    savedStateHandle: SavedStateHandle,
+    workTagRepository: WorkTagsRepository,
+) : ViewModel() {
     private val itemId: Int = checkNotNull(savedStateHandle[WorkTagDetailsDestination.ID_ARG])
 
     val uiState: StateFlow<WorkTagState> =
