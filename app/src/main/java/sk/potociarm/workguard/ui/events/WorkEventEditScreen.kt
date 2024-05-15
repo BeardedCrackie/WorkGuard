@@ -31,7 +31,7 @@ import sk.potociarm.workguard.ui.tags.sampleTagList
 
 object WorkEventEditDestination : NavDestination {
     override val route = "work_event_edits"
-    override val titleRes = R.string.worktag_detail_title
+    override val titleRes = R.string.workevent_edit_title
     const val ID_ARG = "id"
     val routeWithArgs = "$route/{$ID_ARG}"
 }

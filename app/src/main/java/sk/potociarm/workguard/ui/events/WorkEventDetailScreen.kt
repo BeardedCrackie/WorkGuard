@@ -40,7 +40,6 @@ import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.component.RowDescUiComponent
 import sk.potociarm.workguard.ui.navigation.NavDestination
-import sk.potociarm.workguard.ui.tags.WorkTagDetailsDestination
 import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.component.WorkTagCard
 import sk.potociarm.workguard.ui.tags.sampleTagUiWithParent
@@ -68,7 +67,7 @@ fun WorkEventDetailsScreen(
     Scaffold(
         topBar = {
             WorkGuardTopAppBar(
-                title = stringResource(WorkTagDetailsDestination.titleRes),
+                title = stringResource(WorkEventDetailsDestination.titleRes),
                 canNavigateBack = true,
                 navigateUp = navigateBack,
             )

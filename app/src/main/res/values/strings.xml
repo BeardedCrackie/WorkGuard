@@ -46,4 +46,5 @@
     <string name="work_event_price">price</string>
     <string name="work_event_earn">Earn</string>
     <string name="work_event_price_overrided">Price overrided</string>
+    <string name="workevent_edit_title">Edit event</string>
 </resources>
