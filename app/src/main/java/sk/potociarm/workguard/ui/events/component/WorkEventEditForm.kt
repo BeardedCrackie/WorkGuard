@@ -45,32 +45,35 @@ fun WorkEventFormCard(
 ) {
     //val workEvent by remember { mutableStateOf(workEventState) }
     Log.v("Event edit", workEventState.toString())
-
-
-    Card(
+    Box(
+        modifier = Modifier.padding(contentPadding))
+    {
+        Card(
+            modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_small)),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
-        ),
-        onClick = {}
-    ) {
-    Column(
-        modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
-    ) {
-        // Title field
-        WorkEventForm(
-            workEvent = workEventState,
-            onEventStateChange = onEventStateChange
-        )
-        OutlinedButton(
-            onClick = { onButtonClick() },
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+            ),
+            onClick = {}
+        ) {
+            Column(
+                modifier.padding(all = dimensionResource(R.dimen.padding_medium)),
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
             ) {
-            Text("Save")
+                // Title field
+                WorkEventForm(
+                    workEvent = workEventState,
+                    onEventStateChange = onEventStateChange
+                )
+                OutlinedButton(
+                    onClick = { onButtonClick() },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.small,
+                ) {
+                    Text("Save")
+                }
+            }
         }
-    }
     }
 }
 
@@ -96,7 +99,7 @@ fun WorkEventForm(
         OutlinedTextField(
             value = workEvent.description,
             onValueChange = {
-            onEventStateChange(workEvent.copy(description = it))
+                onEventStateChange(workEvent.copy(description = it))
             },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth()
@@ -113,15 +116,21 @@ fun WorkEventForm(
                     },
                     confirmButton = {
                         Button(onClick = {
-                            Log.d("Event edit","event date picked ${LocalDate.fromEpochDays(
-                                (datePickerState.selectedDateMillis!! / 86400000).toInt())}")
+                            Log.d(
+                                "Event edit", "event date picked ${
+                                    LocalDate.fromEpochDays(
+                                        (datePickerState.selectedDateMillis!! / 86400000).toInt()
+                                    )
+                                }"
+                            )
                             openDialog.value = false
                             onEventStateChange(
                                 workEvent.copy(
                                     date = LocalDate.fromEpochDays(
                                         (datePickerState.selectedDateMillis!! / 86400000).toInt()
-                                    ))
+                                    )
                                 )
+                            )
                         }) {
                             Text("Accept")
                         }
@@ -130,7 +139,7 @@ fun WorkEventForm(
                     DatePicker(
                         state = datePickerState,
 
-                    )
+                        )
                 }
             }
         }
@@ -153,7 +162,8 @@ fun WorkEventForm(
                 disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 //For Icons
                 disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
 
         // Start time field
@@ -168,13 +178,14 @@ fun WorkEventForm(
                 }
                 .fillMaxWidth(),
             colors = OutlinedTextFieldDefaults.colors(
-            disabledTextColor = MaterialTheme.colorScheme.onSurface,
-            disabledBorderColor = MaterialTheme.colorScheme.outline,
-            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            //For Icons
-            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                //For Icons
+                disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         )
 
         // End time field

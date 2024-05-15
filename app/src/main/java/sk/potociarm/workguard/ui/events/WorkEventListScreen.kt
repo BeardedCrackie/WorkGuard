@@ -3,6 +3,8 @@ package sk.potociarm.workguard.ui.events
 
 import android.util.Log
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -88,11 +90,14 @@ fun WorkEventListScreen(
             }
         },
     ) { innerPadding->
-        WorkEventListBody(
-            goToEventDetail = navigateToWorkEventDetail,
-            workEventsMap = workEventMap.value,
-            contentPadding = innerPadding
-        )
+        Box(
+            Modifier.padding(innerPadding)
+        ) {
+            WorkEventListBody(
+                goToEventDetail = navigateToWorkEventDetail,
+                workEventsMap = workEventMap.value,
+            )
+        }
     }
 }
 
@@ -121,7 +126,6 @@ private fun WorkEventListBody(
                         goToEventDetail(it.id)
                         Log.v("WorkEvent action","Go to detail $it")
                                   },
-                    contentPadding = contentPadding
                 )
             }
         }
@@ -133,7 +137,6 @@ private fun WorkEventDateList(
     date: LocalDate,
     eventsInDate: List<WorkEvent>,
     onItemClick: (WorkEvent) -> Unit,
-    contentPadding: PaddingValues,
     expanded: Boolean = false
 ) {
 
@@ -150,13 +153,12 @@ private fun WorkEventDateList(
     ) {
         Column(
             modifier = Modifier
+                .padding(all = dimensionResource(id = R . dimen . padding_small)) // contentPadding)
                 .fillMaxWidth()
-                .clickable(onClick = { isExpanded = !isExpanded })
-                .padding(contentPadding),
+                .clickable(onClick = { isExpanded = !isExpanded }),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium)),
         ) {
-            // Show the date header
             WorkEventDateHeader(
-                //modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_extra_small)),
                 date = date,
                 dateWorkDuration = printRunningTime(eventsInDate),
                 dateWorkEarn = printDateEarn(eventsInDate)
@@ -274,7 +276,6 @@ fun WorkEventDateListPreview() {
             eventsInDate = sampleEventList(),
             expanded = true,
             onItemClick = {},
-            contentPadding = PaddingValues(all = dimensionResource(id = R.dimen.padding_small))
         )
     }
 }

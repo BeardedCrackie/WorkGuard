@@ -2,17 +2,15 @@ package sk.potociarm.workguard.ui.events
 
 import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
@@ -94,14 +92,8 @@ fun WorkEventDetailsScreen(
             event = eventState.value,
             eventTag = eventTagState?.value,
             navigateToWorkTag = navigateToWorkTag,
-            modifier = Modifier
-                .padding(
-                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
-                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
-                    top = innerPadding.calculateTopPadding()
-                )
-                .verticalScroll(rememberScrollState()
-        ))
+            contentPadding = innerPadding,
+        )
     }
 }
 
@@ -110,14 +102,13 @@ private fun WorkEventDetailsBody(
     event: WorkEventState,
     eventTag: WorkTagState?,
     navigateToWorkTag: (Int) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.padding(dimensionResource(id = R.dimen.padding_medium)),
-        verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_medium))
+    contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
+    ) {
+    Box(
+        modifier = Modifier.padding(contentPadding),
     ) {
         WorkEventDetailCard(
-            modifier = Modifier,
+            modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_small)),
             event = event,
             eventTag = eventTag,
             navigateToWorkTag = navigateToWorkTag
@@ -140,7 +131,7 @@ fun WorkEventDetailCard(
         )
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_small)),
         ) {
             Column {
                 RowDescUiComponent(
