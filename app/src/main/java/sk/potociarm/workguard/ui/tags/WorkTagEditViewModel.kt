@@ -17,7 +17,7 @@ class WorkTagEditViewModel(
     private val workTagsRepository: WorkTagsRepository
 ) : WorkTagEntryViewModel(workTagsRepository) {
 
-    private val itemId: Int = checkNotNull(savedStateHandle[WorkTagDetailsDestination.ID_ARG])
+    private val itemId: Int = checkNotNull(savedStateHandle[WorkTagEditDestination.ID_ARG])
 
     override val otherTagsUiState: StateFlow<WorkTagUiList> =
         workTagsRepository.getOtherWorkTagsStream(tagState.id).map {

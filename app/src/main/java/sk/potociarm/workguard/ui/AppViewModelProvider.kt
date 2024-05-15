@@ -59,14 +59,14 @@ object AppViewModelProvider {
         }
 
         initializer {
-            WorkEventEntryViewModel(
+            WorkEventEditViewModel(
+                this.createSavedStateHandle(),
                 workGuardApplication().container.tagRepository,
                 workGuardApplication().container.eventRepository)
         }
 
         initializer {
-            WorkEventEditViewModel(
-                this.createSavedStateHandle(),
+            WorkEventEntryViewModel(
                 workGuardApplication().container.tagRepository,
                 workGuardApplication().container.eventRepository)
         }

@@ -1,6 +1,7 @@
 
 package sk.potociarm.workguard.ui.events
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -57,7 +58,7 @@ object WorkEventListDestination : NavDestination {
 @Composable
 fun WorkEventListScreen(
     navigateToWorkEventEntry: () -> Unit,
-    navigateToWorkEventUpdate: (Int) -> Unit,
+    navigateToWorkEventDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: WorkEventListViewModel = viewModel(factory = AppViewModelProvider.Factory),
     openNavigation: () -> Unit
@@ -88,7 +89,7 @@ fun WorkEventListScreen(
         },
     ) { innerPadding->
         WorkEventListBody(
-            onItemClick = navigateToWorkEventUpdate,
+            goToEventDetail = navigateToWorkEventDetail,
             workEventsMap = workEventMap.value,
             contentPadding = innerPadding
         )
@@ -98,7 +99,7 @@ fun WorkEventListScreen(
 @Composable
 private fun WorkEventListBody(
     workEventsMap: Map<LocalDate, List<WorkEvent>>,
-    onItemClick: (Int) -> Unit,
+    goToEventDetail: (Int) -> Unit,
     contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
 ) {
     Column(
@@ -116,7 +117,10 @@ private fun WorkEventListBody(
                 WorkEventDateList(
                     date = eventList.key,
                     eventsInDate = eventList.value,
-                    onItemClick = { onItemClick(it.id) },
+                    onItemClick = {
+                        goToEventDetail(it.id)
+                        Log.v("WorkEvent action","Go to detail $it")
+                                  },
                     contentPadding = contentPadding
                 )
             }
@@ -137,7 +141,8 @@ private fun WorkEventDateList(
 
     Card(
         modifier = Modifier
-            .padding(all = dimensionResource(R.dimen.padding_small)),
+            .padding(all = dimensionResource(R.dimen.padding_small))
+        ,
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
             contentColor = MaterialTheme.colorScheme.onPrimaryContainer
@@ -151,7 +156,7 @@ private fun WorkEventDateList(
         ) {
             // Show the date header
             WorkEventDateHeader(
-                modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_extra_small)),
+                //modifier = Modifier.padding(all = dimensionResource(id = R.dimen.padding_extra_small)),
                 date = date,
                 dateWorkDuration = printRunningTime(eventsInDate),
                 dateWorkEarn = printDateEarn(eventsInDate)
@@ -244,7 +249,7 @@ fun WorkEventBodyPreview() {
     WorkGuardTheme {
         WorkEventListBody(
             workEventsMap = sampleEventMap(),
-            onItemClick = {},
+            goToEventDetail = {},
         )
     }
 }
@@ -255,7 +260,7 @@ fun WorkEventEmptyListPreview() {
     WorkGuardTheme {
         WorkEventListBody(
             workEventsMap = sampleEmptyEventMap(),
-            onItemClick = {}
+            goToEventDetail = {}
         )
     }
 }

@@ -24,7 +24,7 @@ interface WorkEventDao {
     suspend fun deleteById(id: Int)
 
     @Query("SELECT * from work_event WHERE id = :id")
-    fun getWorkEvent(id: Int): Flow<WorkEvent>
+    fun getWorkEvent(id: Int): Flow<WorkEvent?>
 
     @Query("SELECT * from work_event")
     fun getAllWorkEvents(): List<WorkEvent>

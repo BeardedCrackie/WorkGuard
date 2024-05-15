@@ -1,6 +1,7 @@
 package sk.potociarm.workguard.ui.events.component
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,13 +23,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.compose.WorkGuardTheme
+import kotlinx.datetime.LocalDate
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.ui.events.WorkEventState
 import sk.potociarm.workguard.ui.events.sampleEventWithTag
@@ -37,12 +38,15 @@ import sk.potociarm.workguard.ui.events.sampleEventWithTag
 @Composable
 fun WorkEventFormCard(
     modifier: Modifier = Modifier,
-    initialWorkEvent: WorkEventState = WorkEventState(),
+    workEventState: WorkEventState,
     onEventStateChange: (WorkEventState) -> Unit,
     onButtonClick: () -> Unit,
     contentPadding: PaddingValues = PaddingValues(all = dimensionResource(id = R.dimen.padding_small)),
 ) {
-    val workEvent by remember { mutableStateOf(initialWorkEvent) }
+    //val workEvent by remember { mutableStateOf(workEventState) }
+    Log.v("Event edit", workEventState.toString())
+
+
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -56,7 +60,7 @@ fun WorkEventFormCard(
     ) {
         // Title field
         WorkEventForm(
-            workEvent = workEvent,
+            workEvent = workEventState,
             onEventStateChange = onEventStateChange
         )
         OutlinedButton(
@@ -109,24 +113,34 @@ fun WorkEventForm(
                     },
                     confirmButton = {
                         Button(onClick = {
+                            Log.d("Event edit","event date picked ${LocalDate.fromEpochDays(
+                                (datePickerState.selectedDateMillis!! / 86400000).toInt())}")
                             openDialog.value = false
-
+                            onEventStateChange(
+                                workEvent.copy(
+                                    date = LocalDate.fromEpochDays(
+                                        (datePickerState.selectedDateMillis!! / 86400000).toInt()
+                                    ))
+                                )
                         }) {
                             Text("Accept")
                         }
 
                     }) {
-                    DatePicker(state = datePickerState)
+                    DatePicker(
+                        state = datePickerState,
+
+                    )
                 }
             }
         }
 
         // Date field
         OutlinedTextField(
-            value = workEvent.startTime.toString(),
+            value = workEvent.date.toString(),
             enabled = false,
             onValueChange = {},
-            label = { Text("start time") }, //todo set do String resource=
+            label = { Text("date") }, //todo set do String resource=
             modifier = Modifier
                 .clickable {
                     openDialog.value = true
@@ -193,7 +207,8 @@ fun WorkEventFormCardPreview() {
         WorkEventFormCard(
             //modifier = Modifier,
             onButtonClick = {},
-            onEventStateChange = {}
+            onEventStateChange = {},
+            workEventState = sampleEventWithTag()
         )
     }
 }

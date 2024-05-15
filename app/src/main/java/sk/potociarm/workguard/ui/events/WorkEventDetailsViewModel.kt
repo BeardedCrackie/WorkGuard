@@ -14,7 +14,11 @@ import sk.potociarm.workguard.data.worktag.WorkTagsRepository
 import sk.potociarm.workguard.ui.tags.WorkTagState
 import sk.potociarm.workguard.ui.tags.toWorkTagUi
 
-class WorkEventDetailsViewModel(savedStateHandle: SavedStateHandle, workTagRepository: WorkTagsRepository, workEventsRepository: WorkEventsRepository) : ViewModel() {
+class WorkEventDetailsViewModel(
+    savedStateHandle: SavedStateHandle,
+    workTagRepository: WorkTagsRepository,
+    workEventsRepository: WorkEventsRepository
+) : ViewModel() {
     private val itemId: Int = checkNotNull(savedStateHandle[WorkEventDetailsDestination.ID_ARG])
 
     val eventUiState: StateFlow<WorkEventState> =

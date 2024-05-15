@@ -1,5 +1,6 @@
 package sk.potociarm.workguard.ui.events
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,6 +62,9 @@ fun WorkEventDetailsScreen(
 ) {
     val eventState = viewModel.eventUiState.collectAsState()
     val eventTagState = viewModel.tagUiState?.collectAsState()
+
+    Log.v("Event detail", eventState.toString())
+
     Scaffold(
         topBar = {
             WorkGuardTopAppBar(
