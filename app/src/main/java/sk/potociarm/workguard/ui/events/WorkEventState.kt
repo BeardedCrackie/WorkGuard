@@ -6,6 +6,7 @@ import kotlinx.datetime.LocalTime
 import sk.potociarm.workguard.data.workevent.WorkEvent
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.tags.WorkTagState
+import java.math.RoundingMode
 import java.time.LocalDateTime
 import java.time.Month
 
@@ -25,7 +26,7 @@ data class WorkEventState(
         LocalDateTime.now().toLocalTime().toSecondOfDay()
         val start = startTime.toSecondOfDay()
         if (end > start) {
-            return end - start;
+            return end - start
         }
         return 86400 - start + end
     }
@@ -35,7 +36,8 @@ data class WorkEventState(
     }
 
     fun computeEarn() : Double {
-        return this.price * (getRunTimeInSeconds().toDouble()/3600)
+        return (this.price * (getRunTimeInSeconds().toDouble()/3600))
+            .toBigDecimal().setScale(2, RoundingMode.DOWN).toDouble()
     }
 
 }
@@ -66,7 +68,8 @@ fun WorkEvent.toWorkEventState(): WorkEventState = WorkEventState(
     startTime = LocalTime.fromSecondOfDay(startTime),
     endTime = endTime?.let { LocalTime.fromSecondOfDay(it) },
     description = description,
-    price = price
+    price = price,
+    overridePrice = overridePrice
 )
 
 data class WorkEventListState(
@@ -75,7 +78,7 @@ data class WorkEventListState(
 
 data class WorkEventStateMap(val eventTagsMap: Map<String, List<WorkEvent>> = mapOf())
 
-fun sampleEventWithTag(): WorkEventState {
+fun sampleEventWithoutTag(): WorkEventState {
     return sampleRunningEventWithTag().copy(
         endTime = LocalTime(hour = 10, minute = 10)
     )
@@ -92,7 +95,7 @@ fun sampleRunningEventWithTag(): WorkEventState {
 }
 
 
-fun sampleEventWithoutTag(): WorkEventState {
+fun sampleEventWithTag(): WorkEventState {
     return sampleRunningEventWithTag().copy(
         tagId = 1)
 }

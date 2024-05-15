@@ -33,5 +33,5 @@ data class WorkEventWithTag (
     @Relation(
         parentColumn = "tag",
         entityColumn = "id")
-    val tag: WorkTag,
+    val tag: WorkTag?,
 )

@@ -15,7 +15,7 @@ interface WorkEventDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(workEvent: WorkEvent)
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(workEvent: WorkEvent)
 
     @Delete
@@ -34,7 +34,7 @@ interface WorkEventDao {
 
     @Transaction
     @Query("SELECT * from work_event WHERE id = :id")
-    fun getUsersAndLibraries(id: Int): Flow<WorkEventWithTag>
+    fun getWorkEventsWithTag(id: Int): Flow<WorkEventWithTag>
 
     /*
     @Query("SELECT * from work_event GROUP BY start_date")

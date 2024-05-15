@@ -9,9 +9,10 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import sk.potociarm.workguard.TIMEOUT_MILLIS
+import sk.potociarm.workguard.data.workevent.WorkEventWithTag
 import sk.potociarm.workguard.data.workevent.WorkEventsRepository
 import sk.potociarm.workguard.ui.tags.WorkTagState
-import sk.potociarm.workguard.ui.tags.toWorkTagUi
+import sk.potociarm.workguard.ui.tags.toWorkTagState
 
 class WorkEventDetailsViewModel(
     savedStateHandle: SavedStateHandle,
@@ -20,11 +21,11 @@ class WorkEventDetailsViewModel(
     private val itemId: Int = checkNotNull(savedStateHandle[WorkEventDetailsDestination.ID_ARG])
 
     val eventWithTagState: StateFlow<WorkEventDetailUiState> =
-        workEventsRepository.getUsersAndLibraries(itemId)
+        workEventsRepository.getWorkEventsWithTag(itemId)
             .filterNotNull()
             .map {
                 WorkEventDetailUiState(
-                    tag = it.tag.toWorkTagUi(),
+                    tag = it.tag?.toWorkTagState(),
                     event = it.event.toWorkEventState()
                 )
             }
@@ -34,12 +35,17 @@ class WorkEventDetailsViewModel(
                 initialValue = WorkEventDetailUiState()
             )
 
-    /**
-     * UI state for WorkEventWithTagState
-     */
-    data class WorkEventDetailUiState(
-        val tag: WorkTagState = WorkTagState(),
-        val event: WorkEventState = WorkEventState()
-    )
-
 }
+
+/**
+ * UI state for WorkEventWithTagState
+ */
+data class WorkEventDetailUiState(
+    var tag: WorkTagState? = WorkTagState(),
+    var event: WorkEventState = WorkEventState()
+)
+
+fun WorkEventWithTag.toWorkEventDetailUiState(): WorkEventDetailUiState = WorkEventDetailUiState(
+    tag = tag?.toWorkTagState(),
+    event = event.toWorkEventState()
+)

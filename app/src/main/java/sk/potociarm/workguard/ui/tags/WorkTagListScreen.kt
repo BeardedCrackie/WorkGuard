@@ -124,7 +124,7 @@ private fun WorkTagList(
     ){
         items(items = tags, key = { it.id }) { item ->
             WorkTagCard(
-                tag = item.toWorkTagUi(),
+                tag = item.toWorkTagState(),
                 parentTag = tags.find { it.id == item.parentId },
                 modifier = Modifier
                     .padding(all = dimensionResource(R.dimen.padding_small))

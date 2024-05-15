@@ -33,7 +33,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.compose.WorkGuardTheme
+import sk.potociarm.workguard.HOUR_RATE_SYMBOL
 import sk.potociarm.workguard.R
+import sk.potociarm.workguard.RATE_SYMBOL
 import sk.potociarm.workguard.WorkGuardTopAppBar
 import sk.potociarm.workguard.ui.AppViewModelProvider
 import sk.potociarm.workguard.ui.component.RowDescUiComponent
@@ -139,6 +141,10 @@ fun WorkEventDetailCard(
                     textValue = event.name
                 )
                 RowDescUiComponent(
+                    labelResID = R.string.work_event_description,
+                    textValue = event.description
+                )
+                RowDescUiComponent(
                     labelResID = R.string.work_event_start_date,
                     textValue = event.date.toString()
                 )
@@ -155,9 +161,18 @@ fun WorkEventDetailCard(
                     textValue = event.getRunTime().toString()
                 )
                 RowDescUiComponent(
-                    labelResID = R.string.work_event_description,
-                    textValue = event.description
+                    labelResID = R.string.work_event_price,
+                    textValue = "${event.price} $HOUR_RATE_SYMBOL"
                 )
+                RowDescUiComponent(
+                    labelResID = R.string.work_event_price_overrided,
+                    textValue = "${event.overridePrice}"
+                )
+                RowDescUiComponent(
+                    labelResID = R.string.work_event_earn,
+                    textValue = "${event.computeEarn()} $RATE_SYMBOL"
+                )
+
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.outlineVariant,
                     thickness = 1.dp

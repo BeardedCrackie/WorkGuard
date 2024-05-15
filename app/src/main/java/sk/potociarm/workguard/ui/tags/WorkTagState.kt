@@ -32,7 +32,7 @@ fun WorkTagState.toWorkTag(): WorkTag = WorkTag(
 /**
  * Extension function to convert [WorkTag] to [WorkTagState]
  */
-fun WorkTag.toWorkTagUi(): WorkTagState = WorkTagState(
+fun WorkTag.toWorkTagState(): WorkTagState = WorkTagState(
     id = id,
     name = name,
     price = price.toString(),
