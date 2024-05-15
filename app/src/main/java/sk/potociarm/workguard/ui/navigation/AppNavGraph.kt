@@ -39,7 +39,9 @@ fun AppNavHost(
 ) {
     NavHost(
         //navController = navController, startDestination = HomeScreen.route, modifier = modifier
-        navController = navController, startDestination = WorkEventListDestination.route, modifier = modifier
+        navController = navController,
+        startDestination = WorkEventListDestination.route,
+        modifier = modifier
     ) {
 
         // ----- Home screen -----
@@ -108,8 +110,8 @@ fun AppNavHost(
         composable(route = WorkEventListDestination.route) {
             WorkEventListScreen(
                 navigateToWorkEventEntry = { navController.navigate(WorkEventEntryDestination.route) },
-                navigateToWorkEventUpdate = { navController.navigate("${WorkEventDetailsDestination.route}/$it") },
-                openNavigation = { openMenu() }
+                navigateToWorkEventDetail = { navController.navigate("${WorkEventDetailsDestination.route}/$it") },
+                    openNavigation = { openMenu() }
             )
         }
 
