@@ -48,9 +48,9 @@ import kotlinx.datetime.LocalTime
 import sk.potociarm.workguard.R
 import sk.potociarm.workguard.data.worktag.WorkTag
 import sk.potociarm.workguard.ui.component.OutlinedLabeledButton
+import sk.potociarm.workguard.ui.component.TimePickerDialog
 import sk.potociarm.workguard.ui.events.WorkEventState
 import sk.potociarm.workguard.ui.events.sampleEventWithTag
-import sk.potociarm.workguard.ui.tags.component.TimePickerDialog
 import sk.potociarm.workguard.ui.tags.sampleTagList
 
 

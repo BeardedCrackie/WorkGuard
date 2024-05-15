@@ -1,4 +1,4 @@
-package sk.potociarm.workguard.ui.tags.component
+package sk.potociarm.workguard.ui.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
